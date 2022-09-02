@@ -1,4 +1,2 @@
-Project_data/data_sncf
-Project_data/data_sncf.zip
-Project_data/timetables.csv
-
+Project_data/*
+!Project_data/.gitkeep
