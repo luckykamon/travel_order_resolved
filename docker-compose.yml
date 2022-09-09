@@ -7,4 +7,11 @@ services:
       dockerfile: Dockerfile
     ports:
       - "5000:5000"
+  nlp:
+    container_name: nlp
+    build:
+      context: nlp
+      dockerfile: Dockerfile
+    ports:
+      - "8989:8989"
 

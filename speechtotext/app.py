@@ -31,9 +31,9 @@ def sound():
                     fd.write(data)
                 return({"data": data}, 200)
             except Exception as e:
-                return({"Cannot process" : e}, 500)
+                return({"Cannot process" : str(e)}, 500)
     except Exception as e:
-        return({"Cannot get file" : e}, 500)
+        return({"Cannot get file" : str(e)}, 500)
 
 @app.route('/', methods=["GET"])
 def index():

@@ -3,8 +3,7 @@ name: CI / CD T-AIA-910-REN_1
 on:
   push:
     branches:
-      - main
-      - speech_to_text
+      - '**'
 
 jobs:
   tests:
@@ -26,6 +25,11 @@ jobs:
           wget 51.255.173.25:8889/3_Allee_Raymond_Cornon.wav
           wget 51.255.173.25:8889/3_Allee_Raymond_Cornon.qt
           python3 tests.py
+          cd -
+      - name: tests nlp
+        run: |
+          cd nlp
+          python3 test.py
           cd -
       - name: deploy on vps
         run: cd deploy && docker build -t deploy . && docker run deploy
