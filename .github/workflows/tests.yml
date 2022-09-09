@@ -1,0 +1,14 @@
+name: CI / CD T-AIA-910-REN_1
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  tests:
+    name: 'tests'
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
