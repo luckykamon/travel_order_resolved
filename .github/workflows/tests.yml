@@ -23,4 +23,13 @@ jobs:
           cd speechtotext/tests
           python3 tests.py
           cd -
-          
+      - uses: actions/checkout@master
+      - name: copy file via ssh password
+        uses: appleboy/scp-action@master
+        with:
+          host: 51.255.173.25
+          username: ubuntu
+          password: QAYxupCRSqkf
+          source: "/home/ubuntu/T-AIA-910/asset_tests/*"
+          target: "."
+
