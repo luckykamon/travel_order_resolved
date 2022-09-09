@@ -3,7 +3,8 @@ name: CI / CD T-AIA-910-REN_1
 on:
   push:
     branches:
-      - master
+      - main
+      - speechtotext
 
 jobs:
   tests:
