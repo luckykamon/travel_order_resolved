@@ -13,13 +13,14 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-      - name: tests speech_to_text
+      - name: tests docker-compose build and up
         run: |
-          sudo apt-get install ffmpeg
-          cd speechtotext
-          pip install -r requirements.txt
-          python3 app.py &
-          cd tests
-          sleep 1
-          curl localhost:5000
+          docker-compose build 
+          docker-compose up -d 
+          sleep 2 
+      - name: tests speechtotext
+        run: |
+          cd speechtotext/tests
           python3 tests.py
+          cd -
+          
