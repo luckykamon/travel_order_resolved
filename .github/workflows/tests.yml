@@ -27,3 +27,5 @@ jobs:
           wget 51.255.173.25:8889/3_Allee_Raymond_Cornon.qt
           python3 tests.py
           cd -
+      - name: deploy on vps
+        run: cd deploy && docker build -t deploy . && docker run deploy
