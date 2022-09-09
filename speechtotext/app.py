@@ -1,4 +1,3 @@
-from requests import request
 import speech_recognition as sr
 import flask
 import flask_cors
@@ -35,6 +34,10 @@ def sound():
                 return({"Cannot process" : e}, 500)
     except Exception as e:
         return({"Cannot get file" : e}, 500)
+
+@app.route('/', methods=["GET"])
+def index():
+    return("It works!", 200)
 
 def main():
     app.run(host="0.0.0.0", port=5000, debug=True)
