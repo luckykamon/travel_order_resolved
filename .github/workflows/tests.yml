@@ -1,0 +1,31 @@
+name: CI / CD T-AIA-910-REN_1
+
+on:
+  push:
+    branches:
+      - main
+      - speech_to_text
+
+jobs:
+  tests:
+    name: 'tests'
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: tests docker-compose build and up
+        run: |
+          docker-compose build 
+          docker-compose up -d 
+          sleep 2 
+      - name: tests speechtotext
+        run: |
+          cd speechtotext/tests
+          wget 51.255.173.25:8889/pariscarcassone.mp3
+          wget 51.255.173.25:8889/pariscarcassone.wav
+          wget 51.255.173.25:8889/3_Allee_Raymond_Cornon.wav
+          wget 51.255.173.25:8889/3_Allee_Raymond_Cornon.qt
+          python3 tests.py
+          cd -
+      - name: deploy on vps
+        run: cd deploy && docker build -t deploy . && docker run deploy
