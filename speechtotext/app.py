@@ -10,7 +10,7 @@ flask_cors.CORS(app, resources={r'/*': {'origins': '*'}})
 
 def convert(rawFile):
     rawFile.save(rawFile.filename)
-    audSeg = AudioSegment.from_mp3(rawFile.filename)
+    audSeg = AudioSegment.from_file(rawFile.filename)
     audSeg.export(f"file.wav", format="wav")
     os.remove(rawFile.filename)
 
