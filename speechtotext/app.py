@@ -4,17 +4,14 @@ import flask_cors
 import unidecode
 import os
 from pydub import AudioSegment
-import subprocess
-
 
 app = flask.Flask(__name__)
 flask_cors.CORS(app, resources={r'/*': {'origins': '*'}})
 
 def convert(rawFile):
     rawFile.save(rawFile.filename)
-    # audSeg = AudioSegment.from_file(rawFile.filename)
-    # audSeg.export(f"file.wav", format="wav")
-    subprocess.call(['ffmpeg', '-i', rawFile.filename, 'file.wav'])
+    audSeg = AudioSegment.from_mp3(rawFile.filename)
+    audSeg.export(f"file.wav", format="wav")
     os.remove(rawFile.filename)
 
 @app.route('/speechtotext', methods=["POST"])
