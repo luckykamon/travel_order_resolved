@@ -15,6 +15,7 @@ jobs:
         uses: actions/checkout@v2
       - name: tests speech_to_text
         run: |
+          apt-get install ffmpeg
           cd speechtotext
           pip install -r requirements.txt
           python3 app.py &
