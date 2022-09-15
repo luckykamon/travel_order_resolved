@@ -20,5 +20,5 @@ classDiagram
         +TrainStation arrival_station
     }
 
-    %%Trip "1" -- "2" TrainStation
+    Trip "1" -- "2" TrainStation
 ```
