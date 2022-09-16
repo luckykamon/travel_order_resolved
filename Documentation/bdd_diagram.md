@@ -8,8 +8,8 @@ classDiagram
         +string zip_code
         +string city
         +string country
-        +string latitude
-        +string longitude
+        +float latitude
+        +float longitude
     }
 
     class Trip {

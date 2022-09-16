@@ -1,0 +1,32 @@
+services:
+  bdd_api:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    image: bdd_api:1.0
+    container_name: bdd_api
+    environment:
+      - ENV_VAR=${ENV_VAR}
+      - DB_HOST=${DB_HOST}
+      - DB_PORT=${DB_PORT}
+      - DB_NAME=${DB_NAME}
+      - DB_USER=${DB_USER}
+      - DB_PASSWORD=${DB_PASSWORD}
+    ports:
+      - ${API_PORT}:3000
+    volumes:
+      - ./src:/app
+  
+  bdd_db:
+    image: mongo:5.0.8
+    container_name: bdd_db
+    ports:
+      - ${MONGODB_PORT}:27017
+    volumes:
+      - bdd_data:/data/db
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${DB_USER}
+      MONGO_INITDB_ROOT_PASSWORD: ${DB_PASSWORD}
+
+volumes:
+  bdd_data:
