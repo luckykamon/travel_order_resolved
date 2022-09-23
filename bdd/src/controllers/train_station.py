@@ -11,7 +11,7 @@ train_station_request = blueprints.Blueprint('train_station', __name__)
 @train_station_request.get('/')
 def get_train_stations():
     try:
-        # auth_token(request.headers.get('api_key'))
+        auth_token(request.headers.get('api_key'))
         return jsonify(TrainStationService.getJsonMany()), 200
     except AuthException as e:
         return str(e), 401
@@ -21,7 +21,7 @@ def get_train_stations():
 @train_station_request.get('/<id>')
 def get_train_station(id):
     try:
-        # auth_token(request.headers.get('api_key'))
+        auth_token(request.headers.get('api_key'))
         return jsonify(TrainStationService.getJsonOneById(id)), 200
     except AuthException as e:
         return str(e), 401
@@ -30,6 +30,13 @@ def get_train_station(id):
 
 @train_station_request.post('/')
 def create_train_station():
+    try:
+        auth_token(request.headers.get('api_key'))
+    except AuthException as e:
+        return str(e), 401
+    except Exception as e:
+        return str(e), 400
+    
     create_json = request.json
     if create_json is None:
         return "No JSON found", 400
@@ -43,6 +50,13 @@ def create_train_station():
 
 @train_station_request.put('/<id>')
 def update_train_station(id):
+    try:
+        auth_token(request.headers.get('api_key'))
+    except AuthException as e:
+        return str(e), 401
+    except Exception as e:
+        return str(e), 400
+    
     update_json = request.json
     if update_json is None:
         return "No JSON found", 400
@@ -63,4 +77,10 @@ def update_train_station(id):
 
 @train_station_request.delete('/<id>')
 def delete_train_station(id):
-    return TrainStationService.deleteOne(id), 200
+    try:
+        auth_token(request.headers.get('api_key'))
+        return TrainStationService.deleteOne(id), 200
+    except AuthException as e:
+        return str(e), 401
+    except Exception as e:
+        return str(e), 400
