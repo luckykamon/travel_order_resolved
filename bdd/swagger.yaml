@@ -1,0 +1,352 @@
+openapi: 3.0.3
+info:
+  title: DB api for AI 900 project
+  description: |-
+    Swagger of BDD api for AI 900 project
+  contact:
+    email: jean-baptiste.huet@epitech.eu
+  version: 1.0.0
+servers:
+  - url: http://localhost:8080
+tags:
+  - name: Home
+    description: Just a request for welcome to the API
+  - name: Train Station
+    description: Requests for manage train stations in the DB 
+  - name: Trip
+    description: Requests for manage trips in the DB 
+paths:
+  /:
+    get:
+      tags:
+        - Home
+      summary: Welcome to the API
+      description: Welcome to the API
+      operationId: welcomeApi
+      responses:
+        '200':
+          description: Send welcome to the API
+  /train_station:
+    get:
+      tags:
+        - Train Station
+      summary: Get all train stations
+      description: Get all train stations
+      operationId: getAllTrainStations
+      responses:
+        '200':
+          description: Array with all train stations
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TrainStation'   
+        '400':
+          description: Error system
+      security:
+        - api_key: []
+    post:
+      tags:
+        - Train Station
+      summary: Create a train station
+      description: Create a train station
+      operationId: createOneTrainStation
+      requestBody:
+        description: Create a new train station from id
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TrainStation'
+        required: true
+      responses:
+        '200':
+          description: Successful creation of DB object and sendtrain station informations
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TrainStation'  
+        '400':
+          description: Invalid fields or other error system
+      security:
+        - api_key: []
+  /train_station/{trainStationId}:
+    get:
+      tags:
+        - Train Station
+      summary: Get a train station from id
+      description: Get a train station from id
+      operationId: getOneTrainStationFromId
+      parameters:
+        - name: trainStationId
+          in: path
+          description: ID of train_station to return
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Get informations of train station with this id
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TrainStation'  
+        '400':
+          description: Invalid id or other error system
+      security:
+        - api_key: []
+    put:
+      tags:
+        - Train Station
+      summary: Update a train station from id
+      description: Update a train station from id
+      operationId: updateOneTrainStationFromId
+      parameters:
+        - name: trainStationId
+          in: path
+          description: ID of train_station to update
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: Update a train station from id
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TrainStation'
+        required: true
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TrainStation'         
+        '400':
+          description: Invalid id or invalid fields or other error system
+      security:
+        - api_key: []
+    delete:
+      tags:
+        - Train Station
+      summary: Delete a train station from id
+      description: Delete a train station from id
+      operationId: deleteOneTrainStationFromId
+      parameters:
+        - name: trainStationId
+          in: path
+          description: ID of train_station to delete
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful deletion of DB object
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: Train station deleted
+        '400':
+          description: Invalid id or other error system
+      security:
+        - api_key: []
+  /trip:
+    get:
+      tags:
+        - Trip
+      summary: Get all trips
+      description: Get all trips
+      operationId: getAllTrips
+      responses:
+        '200':
+          description: Array with all trips
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Trip'   
+        '400':
+          description: Error system
+      security:
+        - api_key: []
+    post:
+      tags:
+        - Trip
+      summary: Create a trip
+      description: Create a trip
+      operationId: createOneTrip
+      requestBody:
+        description: Create a new trip from id
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Trip'
+        required: true
+      responses:
+        '200':
+          description: Successful creation of DB object and send trip informations
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Trip'  
+        '400':
+          description: Invalid fields or other error system
+      security:
+        - api_key: []
+  /trip/{tripId}:
+    get:
+      tags:
+        - Trip
+      summary: Get a trip from id
+      description: Get a trip from id
+      operationId: getOneTripFromId
+      parameters:
+        - name: tripId
+          in: path
+          description: ID of trip to return
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Get informations of trip with this id
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Trip'  
+        '400':
+          description: Invalid id or other error system
+      security:
+        - api_key: []
+    put:
+      tags:
+        - Trip
+      summary: Update a trip from id
+      description: Update a trip from id
+      operationId: updateOneTripFromId
+      parameters:
+        - name: tripId
+          in: path
+          description: ID of trip to update
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: Update a trip from id
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Trip'
+        required: true
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Trip'         
+        '400':
+          description: Invalid id or invalid fields or other error system
+      security:
+        - api_key: []
+    delete:
+      tags:
+        - Trip
+      summary: Delete a trip from id
+      description: Delete a trip from id
+      operationId: deleteOneTripFromId
+      parameters:
+        - name: tripId
+          in: path
+          description: ID of trip to delete
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful deletion of DB object
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: Trip deleted
+        '400':
+          description: Invalid id or other error system
+      security:
+        - api_key: []
+components:
+  schemas:
+    TrainStation:
+      type: object
+      properties:
+        id:
+          type: string
+          example: 632c7e5d28ee2e47884ce7b8
+        name:
+          type: string
+          example: Gare Montparnasse
+        slug:
+          type: string
+          example: gare_montparnasse
+        address:
+          type: string
+          example: 17 Bd de Vaugirard
+        zip_code:
+          type: string
+          example: 75015
+        city:
+          type: string
+          example: Paris
+        country:
+          type: string
+          example: France
+        latitude:
+          type: number
+          format: float
+          example: 48.841
+        longitude:
+          type: number
+          format: float
+          example: 2.3203
+    Trip:
+      type: object
+      properties:
+        id:
+          type: string
+          example: 632c7e5d28ee2e47884ce7b8
+        identifier:
+          type: string
+          example: OCESN003463F030038093
+          description: Identifier of trip
+        duration:
+          type: integer
+          example: 3
+          description: Duration of trip in hour
+        departure_station:
+          type: string
+          example: 632c7e5d28ee2e47884ce7b8
+          description: Uuid of departure TrainStation object
+        arrival_station:
+          type: string
+          example: 632c7e5d28ee2e47884ce7b8
+          description: Uuid of arrival TrainStation object
+  requestBodies:
+    TrainStation:
+      description: TrainStation object that needs to be added to the DB
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/TrainStation'
+    Trip:
+      description: Trip object that needs to be added to the DB
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Trip'
+  securitySchemes:
+    api_key:
+      type: apiKey
+      name: api_key
+      in: header

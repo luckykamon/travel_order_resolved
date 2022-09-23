@@ -1,0 +1,5 @@
+Flask==2.1.0
+Flask-Cors==3.0.10
+Pytest==6.2.4
+flask_mongoengine==0.9.5
+requests==2.25.1
