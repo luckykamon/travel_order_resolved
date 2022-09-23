@@ -18,6 +18,8 @@ class Trip(CRUBInterface):
     
     def __getJsonFromObject(object):
         return_json = json.loads(object.to_json())
+        return_json["id"] = str(return_json["_id"]["$oid"])
+        del return_json["_id"]
         return_json["departure_station"] = json.loads(TrainStationService.getJsonOneById(return_json["departure_station"]["$oid"]))
         return_json["arrival_station"] = json.loads(TrainStationService.getJsonOneById(return_json["arrival_station"]["$oid"]))
         return return_json

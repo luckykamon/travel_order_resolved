@@ -16,7 +16,10 @@ class TrainStation(CRUBInterface):
         return TrainStation.__getJsonFromObject(TrainStation.__getOneById(id))
     
     def __getJsonFromObject(object):
-        return json.loads(object.to_json())
+        return_json = json.loads(object.to_json())
+        return_json["id"] = str(return_json["_id"]["$oid"])
+        del return_json["_id"]
+        return return_json
     
     def __getMany():
         return TrainStationSchema.objects
