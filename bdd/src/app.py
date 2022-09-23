@@ -1,12 +1,10 @@
-#!/usr/bin/env python3
-
 import os
 from flask import Flask
 from flask_cors import CORS
 from flask_mongoengine import MongoEngine
 
-from routes.trip import trip
-from routes.train_station import train_station
+from controller.trip import trip_request
+from controller.train_station import train_station_request
 
 is_dev_env = os.environ.get('ENV_VAR') == 'dev'
 
@@ -25,8 +23,8 @@ app.config["MONGODB_SETTINGS"] = [
 ]
 db.init_app(app)
 
-app.register_blueprint(trip, url_prefix='/trip')
-app.register_blueprint(train_station, url_prefix='/train_station')
+app.register_blueprint(trip_request, url_prefix='/trip')
+app.register_blueprint(train_station_request, url_prefix='/train_station')
  
 @app.route('/')
 def welcome():
