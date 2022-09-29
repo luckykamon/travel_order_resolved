@@ -1,12 +1,16 @@
 import json
 import sys
 from .crub_interface import CRUBInterface
+from .train_station import TrainStation as TrainStationService
+from .dto.trip import Trip as TripDTO
 
 sys.path.append("..")
 from schemas.trip import Trip as TripSchema
-from .train_station import TrainStation as TrainStationService
 
 class Trip(CRUBInterface):
+    def __init__(self):
+        self.trip = TripDTO()
+    
     def getJsonMany():
         return_json = []
         for trip in Trip.__getMany():

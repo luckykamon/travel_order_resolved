@@ -1,6 +1,7 @@
 import json
 import sys
 from .crub_interface import CRUBInterface
+from .dto.train_station import TrainStation as TrainStationDTO
 
 sys.path.append("..")
 from schemas.train_station import TrainStation as TrainStationSchema
@@ -28,30 +29,26 @@ class TrainStation(CRUBInterface):
         return TrainStationSchema.objects.get(id=id)
     
     def __ckeckFields(id=None, name=None, slug=None, address=None, zip_code=None, city=None, country=None, latitude=None, longitude=None):
-        if (zip_code is not None):
-            if (len(zip_code) != 5):
-                raise TypeError("Zip code must be 5 characters long")
-            if (not zip_code.isdigit()):
-                raise TypeError("Zip code must be a number")
-        
-        if(id is None):
-            if (name is not None) and (TrainStationSchema.objects(name=name).count() > 0):
-                raise TypeError("Name already exists")
-            if (slug is not None) and (TrainStationSchema.objects(slug=slug).count() > 0):
-                raise TypeError("Slug already exists")
-            if (latitude is not None) and (longitude is not None) and (TrainStationSchema.objects(latitude=latitude, longitude=longitude).count() > 0):
-                raise TypeError("A train station already exists at this location")
-            if (address is not None) and (zip_code is not None) and (city is not None) and (country is not None) and (TrainStationSchema.objects(address=address, zip_code=zip_code, city=city, country=country).count() > 0):
-                raise TypeError("A train station already exists at this address")
-        else:
-            if (name is not None) and (TrainStationSchema.objects(id__ne=id, name=name).count() > 0):
-                raise TypeError("Name already exists")
-            if (slug is not None) and (TrainStationSchema.objects(id__ne=id, slug=slug).count() > 0):
-                raise TypeError("Slug already exists")
-            if (latitude is not None) and (longitude is not None) and (TrainStationSchema.objects(id__ne=id, latitude=latitude, longitude=longitude).count() > 0):
-                raise TypeError("A train station already exists at this location")
-            if (address is not None) and (zip_code is not None) and (city is not None) and (country is not None) and (TrainStationSchema.objects(id__ne=id, address=address, zip_code=zip_code, city=city, country=country).count() > 0):
-                raise TypeError("A train station already exists at this address")
+        if TrainStation.__trainStationNameAlreadyExist(name, id):
+            raise TypeError("Name already exists")
+        if TrainStation.__trainStationSlugAlreadyExist(slug, id):
+            raise TypeError("Slug already exists")
+        if TrainStation.__trainStationGpsAlreadyExist(latitude, longitude, id):
+            raise TypeError("A train station already exists at this location")
+        if TrainStation.__trainStationAddressAlreadyExist(address, zip_code, city, country, id):
+            raise TypeError("A train station already exists at this address")
+
+    def __trainStationNameAlreadyExist(name, id=None):
+        return TrainStationSchema.objects(id__ne=id, name=name).count() > 0
+    
+    def __trainStationSlugAlreadyExist(slug, id=None):
+        return TrainStationSchema.objects(id__ne=id, slug=slug).count() > 0
+
+    def __trainStationGpsAlreadyExist(latitude, longitude, id=None):
+        return (latitude is not None) and (longitude is not None) and (TrainStationSchema.objects(id__ne=id, latitude=latitude, longitude=longitude).count() > 0)
+    
+    def __trainStationAddressAlreadyExist(address, zip_code, city, country, id=None):
+        return (address is not None) and (zip_code is not None) and (city is not None) and (country is not None) and (TrainStationSchema.objects(id__ne=id, address=address, zip_code=zip_code, city=city, country=country).count() > 0)
 
     def createOne(name, slug, address, zip_code, city, country, latitude, longitude):   
         TrainStation.__ckeckFields(name=name, slug=slug, address=address, zip_code=zip_code, city=city, country=country, latitude=latitude, longitude=longitude)
