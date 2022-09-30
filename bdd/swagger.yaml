@@ -41,7 +41,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/TrainStation'   
+                  $ref: '#/components/schemas/TrainStationResponse'   
         '400':
           description: Error system
       security:
@@ -57,7 +57,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/TrainStation'
+              $ref: '#/components/schemas/TrainStationBody'
         required: true
       responses:
         '200':
@@ -65,7 +65,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/TrainStation'  
+                $ref: '#/components/schemas/TrainStationResponse'  
         '400':
           description: Invalid fields or other error system
       security:
@@ -90,7 +90,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/TrainStation'  
+                $ref: '#/components/schemas/TrainStationResponse'  
         '400':
           description: Invalid id or other error system
       security:
@@ -113,7 +113,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/TrainStation'
+              $ref: '#/components/schemas/TrainStationBody'
         required: true
       responses:
         '200':
@@ -121,7 +121,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/TrainStation'         
+                $ref: '#/components/schemas/TrainStationResponse'         
         '400':
           description: Invalid id or invalid fields or other error system
       security:
@@ -143,7 +143,7 @@ paths:
         '200':
           description: successful deletion of DB object
           content:
-            text/plain:
+            text/html:
               schema:
                 type: string
                 example: Train station deleted
@@ -166,7 +166,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Trip'   
+                  $ref: '#/components/schemas/TripResponse'   
         '400':
           description: Error system
       security:
@@ -182,7 +182,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Trip'
+              $ref: '#/components/schemas/TripBodyCreate'
         required: true
       responses:
         '200':
@@ -190,7 +190,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Trip'  
+                $ref: '#/components/schemas/TripResponse'  
         '400':
           description: Invalid fields or other error system
       security:
@@ -215,7 +215,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Trip'  
+                $ref: '#/components/schemas/TripResponse'  
         '400':
           description: Invalid id or other error system
       security:
@@ -238,7 +238,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Trip'
+              $ref: '#/components/schemas/TripBodyUpdate'
         required: true
       responses:
         '200':
@@ -246,7 +246,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Trip'         
+                $ref: '#/components/schemas/TripResponse'         
         '400':
           description: Invalid id or invalid fields or other error system
       security:
@@ -268,7 +268,7 @@ paths:
         '200':
           description: successful deletion of DB object
           content:
-            text/plain:
+            text/html:
               schema:
                 type: string
                 example: Trip deleted
@@ -278,7 +278,36 @@ paths:
         - api_key: []
 components:
   schemas:
-    TrainStation:
+    TrainStationBody:
+      type: object
+      properties:
+        name:
+          type: string
+          example: Gare Montparnasse
+        slug:
+          type: string
+          example: gare_montparnasse
+        address:
+          type: string
+          example: 17 Bd de Vaugirard
+        zip_code:
+          type: string
+          example: 75015
+        city:
+          type: string
+          example: Paris
+        country:
+          type: string
+          example: France
+        latitude:
+          type: number
+          format: float
+          example: 48.841
+        longitude:
+          type: number
+          format: float
+          example: 2.3203
+    TrainStationResponse:
       type: object
       properties:
         id:
@@ -310,12 +339,9 @@ components:
           type: number
           format: float
           example: 2.3203
-    Trip:
+    TripBodyCreate:
       type: object
       properties:
-        id:
-          type: string
-          example: 632c7e5d28ee2e47884ce7b8
         identifier:
           type: string
           example: OCESN003463F030038093
@@ -332,19 +358,33 @@ components:
           type: string
           example: 632c7e5d28ee2e47884ce7b8
           description: Uuid of arrival TrainStation object
-  requestBodies:
-    TrainStation:
-      description: TrainStation object that needs to be added to the DB
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/TrainStation'
-    Trip:
-      description: Trip object that needs to be added to the DB
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Trip'
+    TripBodyUpdate:
+      type: object
+      properties:
+        duration:
+          type: integer
+          example: 3
+          description: Duration of trip in hour
+    TripResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          example: 632c7e5d28ee2e47884ce7b8
+        identifier:
+          type: string
+          example: OCESN003463F030038093
+          description: Identifier of trip
+        duration:
+          type: integer
+          example: 3
+          description: Duration of trip in hour
+        departure_station:
+          $ref: '#/components/schemas/TrainStationResponse'
+          description: Uuid of departure TrainStation object
+        arrival_station:
+          $ref: '#/components/schemas/TrainStationResponse'
+          description: Uuid of arrival TrainStation object
   securitySchemes:
     api_key:
       type: apiKey

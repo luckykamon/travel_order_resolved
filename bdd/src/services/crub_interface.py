@@ -1,33 +1,10 @@
-class CRUBInterface:    
-    def getJsonMany():
-        """get all json of database objetcs
-
-        Raises:
-            NotImplementedError: not implemented
-
-        Returns:
-            dict: json of all database objects
-        """            
-        raise NotImplementedError
-    
-    def getJsonOneById(id):
-        """get one json of database object from id
+class CRUBInterface:   
+    # GET
+    def __getJsonFromDao(dao):
+        """get json from dao
 
         Args:
-            id (str): id of the database object
-
-        Raises:
-            NotImplementedError: not implemented
-
-        Returns:
-            dict: json of one database object from id
-        """               
-    
-    def __getJsonFromObject(object):
-        """get json from object
-
-        Args:
-            object (object): database object
+            dao (dao): database object
             
         Raises:
             NotImplementedError: not implemented
@@ -35,7 +12,7 @@ class CRUBInterface:
         Returns:
             dict: json of the database object
         """
-        raise NotImplementedError
+        raise NotImplementedError("Not implemented")
     
     def __getMany():
         """get all database objetcs
@@ -46,9 +23,20 @@ class CRUBInterface:
         Returns:
             object: all database objects
         """        
-        raise NotImplementedError
+        raise NotImplementedError("Not implemented")
     
-    def __getOneById(id):
+    def getJsonMany():
+        """get all json of database objetcs
+
+        Raises:
+            NotImplementedError: not implemented
+
+        Returns:
+            dict: json of all database objects
+        """            
+        raise NotImplementedError("Not implemented")
+    
+    def __getOneById(id:str):
         """get one database object from id
 
         Args:
@@ -60,22 +48,41 @@ class CRUBInterface:
         Returns:
             object: one database object from id
         """
-        raise NotImplementedError
+        raise NotImplementedError("Not implemented")
     
-    def __ckeckFields(id=None):
-        """check if all fields correspond to the database object
+    def getJsonOneById(id:str):
+        """get one json of database object from id
 
         Args:
             id (str): id of the database object
 
         Raises:
             NotImplementedError: not implemented
+
+        Returns:
+            dict: json of one database object from id
+        """  
+        raise NotImplementedError("Not implemented") 
+    
+    # CHECK
+    def __ckeckFields(dto):
+        """check if all fields correspond to the database object
+
+        Args:
+            dto (dto): dto of the database object
+
+        Raises:
+            NotImplementedError: not implemented
             TypeError: if a field is not correct
         """
-        raise NotImplementedError
-    
-    def createOne():
+        raise NotImplementedError("Not implemented")
+
+    # CREATE
+    def createOne(json:dict):   
         """create one database object
+        
+        Args:
+            json (dict): json of the database object
         
         Raises:
             NotImplementedError: not implemented
@@ -83,13 +90,15 @@ class CRUBInterface:
         Returns:
             dict: json of the created database object
         """
-        pass
+        raise
     
-    def updateOne(id):
+    # UPDATE
+    def updateOne(id:str, json:dict):
         """update one database object from id
 
         Args:
             id (str): id of the database object
+            json (dict): json of the database object
             
         Raises:
             NotImplementedError: not implemented
@@ -97,9 +106,10 @@ class CRUBInterface:
         Returns:
             dict: json of the updated database object
         """
-        raise NotImplementedError
+        raise NotImplementedError("Not implemented")
     
-    def deleteOne(id):
+    # DELETE
+    def deleteOne(id:str):
         """delete one database object from id
 
         Args:
@@ -111,4 +121,4 @@ class CRUBInterface:
         Returns:
             str: message for validate the deletion
         """
-        raise NotImplementedError
+        raise NotImplementedError("Not implemented")
