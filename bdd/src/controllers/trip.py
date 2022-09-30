@@ -1,5 +1,5 @@
 import sys
-from flask import blueprints, request, jsonify
+from flask import blueprints, request
 
 sys.path.append("..")
 from middlewares.auth import isAuth
@@ -12,7 +12,7 @@ trip_request = blueprints.Blueprint('trip', __name__)
 @isAuth
 @resultManager(ResultManagerType.JSON)
 def get_trips():
-    return jsonify(TripService.getJsonMany())
+    return TripService.getJsonMany()
 
 @trip_request.get('/<id>')
 @isAuth

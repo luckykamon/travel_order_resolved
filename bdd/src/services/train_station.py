@@ -20,6 +20,9 @@ class TrainStation(CRUBInterface):
             return_json.append(TrainStation.__getJsonFromDao(dao))
         return return_json
     
+    def getOneById(id):
+        return TrainStationSchema.objects.get(id=id)
+    
     def __getOneById(id):
         return TrainStationSchema.objects.get(id=id)
     

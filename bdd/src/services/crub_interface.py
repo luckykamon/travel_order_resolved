@@ -12,7 +12,7 @@ class CRUBInterface:
         Returns:
             dict: json of the database object
         """
-        raise NotImplementedError
+        raise NotImplementedError("Not implemented")
     
     def __getMany():
         """get all database objetcs
@@ -23,7 +23,7 @@ class CRUBInterface:
         Returns:
             object: all database objects
         """        
-        raise NotImplementedError
+        raise NotImplementedError("Not implemented")
     
     def getJsonMany():
         """get all json of database objetcs
@@ -34,7 +34,7 @@ class CRUBInterface:
         Returns:
             dict: json of all database objects
         """            
-        raise NotImplementedError
+        raise NotImplementedError("Not implemented")
     
     def __getOneById(id:str):
         """get one database object from id
@@ -48,7 +48,7 @@ class CRUBInterface:
         Returns:
             object: one database object from id
         """
-        raise NotImplementedError
+        raise NotImplementedError("Not implemented")
     
     def getJsonOneById(id:str):
         """get one json of database object from id
@@ -62,7 +62,7 @@ class CRUBInterface:
         Returns:
             dict: json of one database object from id
         """  
-        raise NotImplementedError 
+        raise NotImplementedError("Not implemented") 
     
     # CHECK
     def __ckeckFields(dto):
@@ -75,7 +75,7 @@ class CRUBInterface:
             NotImplementedError: not implemented
             TypeError: if a field is not correct
         """
-        raise NotImplementedError
+        raise NotImplementedError("Not implemented")
 
     # CREATE
     def createOne(json:dict):   
@@ -106,7 +106,7 @@ class CRUBInterface:
         Returns:
             dict: json of the updated database object
         """
-        raise NotImplementedError
+        raise NotImplementedError("Not implemented")
     
     # DELETE
     def deleteOne(id:str):
@@ -121,4 +121,4 @@ class CRUBInterface:
         Returns:
             str: message for validate the deletion
         """
-        raise NotImplementedError
+        raise NotImplementedError("Not implemented")

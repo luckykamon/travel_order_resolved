@@ -1,7 +1,9 @@
 import sys
+from bson import ObjectId
 from .utils.check_type import check_id, check_int, check_str
-from .utils.check_json import exist_in_json, get_key, check_json
+from .utils.check_json import get_key, check_json
 from .dto_interface import DtoInterface
+from .train_station import TrainStation as TrainStationDto
 
 sys.path.append("..")
 from schemas.trip import Trip as TripSchema
@@ -24,8 +26,7 @@ class Trip(DtoInterface):
         
     @id.setter
     def id(self, value):
-        check_id("id", value)
-        self._id = value
+        self._id = check_id("id", value)
         
     @property
     def identifier(self):
@@ -33,8 +34,7 @@ class Trip(DtoInterface):
     
     @identifier.setter
     def identifier(self, value):
-        check_str("identifier", value)
-        self._identifier = value
+        self._identifier = check_str("identifier", value)
         
     @property
     def duration(self):
@@ -42,8 +42,7 @@ class Trip(DtoInterface):
 
     @duration.setter
     def duration(self, value):
-        check_int("duration", value)
-        self._duration = value
+        self._duration = check_int("duration", value)
         
     @property
     def departure_station(self):
@@ -51,8 +50,7 @@ class Trip(DtoInterface):
     
     @departure_station.setter
     def departure_station(self, value):
-        check_id("departure_station", value)
-        self._departure_station = value
+        self._departure_station = check_id("departure_station", value)
         
     @property
     def arrival_station(self):
@@ -60,16 +58,15 @@ class Trip(DtoInterface):
 
     @arrival_station.setter
     def arrival_station(self, value):
-        check_id("arrival_station", value)
-        self._arrival_station = value
+        self._arrival_station = check_id("arrival_station", value)
         
     def toJson(self):
         return {
-            "id": self.id,
+            "id": str(self.id),
             "identifier": self.identifier,
             "duration": self.duration,
-            "departure_station": self.departure_station,
-            "arrival_station": self.arrival_station
+            "departure_station": str(self.departure_station),
+            "arrival_station": str(self.arrival_station)
         }
         
     def __fromJson(self, json):
@@ -85,7 +82,7 @@ class Trip(DtoInterface):
         trip = TripSchema()
         
         if self.id is not None:
-            trip.id = self.id
+            trip.id = str(self.id)
             
         trip.identifier = self.identifier
         trip.duration = self.duration
@@ -94,9 +91,9 @@ class Trip(DtoInterface):
         
         return trip
         
-    def __fromDao(self, dao):
+    def __fromDao(self, dao:TripSchema):
         self.id = str(dao.id)
         self.identifier = dao.identifier
         self.duration = dao.duration
-        self.departure_station = dao.departure_station
-        self.arrival_station = dao.arrival_station
+        self.departure_station = str(dao.departure_station if isinstance(dao.departure_station, ObjectId) else dao.departure_station.id)
+        self.arrival_station = str(dao.arrival_station if isinstance(dao.arrival_station, ObjectId) else dao.arrival_station.id)

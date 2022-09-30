@@ -24,8 +24,7 @@ class TrainStation(DtoInterface):
         
     @id.setter
     def id(self, value):
-        check_id("id", value)
-        self._id = value
+        self._id = check_id("id", value)
         
     @property
     def name(self):
@@ -33,8 +32,7 @@ class TrainStation(DtoInterface):
         
     @name.setter
     def name(self, value):
-        check_str("name", value)
-        self._name = value
+        self._name = check_str("name", value)
         
     @property
     def slug(self):
@@ -42,8 +40,7 @@ class TrainStation(DtoInterface):
 
     @slug.setter
     def slug(self, value):
-        check_slug("slug", value)
-        self._slug = value
+        self._slug = check_slug("slug", value)
         
     @property
     def address(self):
@@ -51,8 +48,7 @@ class TrainStation(DtoInterface):
         
     @address.setter
     def address(self, value):
-        check_str("address", value)
-        self._address = value
+        self._address = check_str("address", value)
         
     @property
     def zip_code(self):
@@ -60,8 +56,7 @@ class TrainStation(DtoInterface):
         
     @zip_code.setter
     def zip_code(self, value):
-        check_zip_code("zip_code", value)
-        self._zip_code = value
+        self._zip_code = check_zip_code("zip_code", value)
         
     @property
     def city(self):
@@ -69,8 +64,7 @@ class TrainStation(DtoInterface):
         
     @city.setter
     def city(self, value):
-        check_str("city", value)
-        self._city = value
+        self._city = check_str("city", value)
         
     @property
     def country(self):
@@ -78,8 +72,7 @@ class TrainStation(DtoInterface):
     
     @country.setter
     def country(self, value):
-        check_str("country", value)
-        self._country = value
+        self._country = check_str("country", value)
         
     @property
     def latitude(self):
@@ -87,8 +80,7 @@ class TrainStation(DtoInterface):
         
     @latitude.setter
     def latitude(self, value):
-        check_float("latitude", value)
-        self._latitude = value
+        self._latitude = check_float("latitude", value)
         
     @property
     def longitude(self):
@@ -96,12 +88,11 @@ class TrainStation(DtoInterface):
         
     @longitude.setter
     def longitude(self, value):
-        check_float("longitude", value)
-        self._longitude = value
+        self._longitude = check_float("longitude", value)
         
     def toJson(self):
         return {
-            "id": self.id,
+            "id": str(self.id),
             "name": self.name,
             "slug": self.slug,
             "address": self.address,

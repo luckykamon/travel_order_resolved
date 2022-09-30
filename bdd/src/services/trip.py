@@ -1,5 +1,4 @@
 import sys
-import json
 from .crub_interface import CRUBInterface
 from .train_station import TrainStation as TrainStationService
 
@@ -22,7 +21,7 @@ class Trip(CRUBInterface):
         return_json = list()
         for trip in Trip.__getMany():
             return_json.append(Trip.__getJsonFromDao(trip))
-        return json.dumps(return_json)
+        return return_json
     
     def __getOneById(id):
         return TripSchema.objects.get(id=id)
@@ -31,7 +30,7 @@ class Trip(CRUBInterface):
         return Trip.__getJsonFromDao(Trip.__getOneById(id))
     
     # CHECK
-    def __ckeckFields(dto:TripDTO):
+    def __ckeckFields(dto:TripDTO):      
         if Trip.__tripTrainStationsIsSame(dto):
             raise TypeError("Departure and arrival stations must be different")
         if Trip.__tripDurationIsNegative(dto):
@@ -62,7 +61,7 @@ class Trip(CRUBInterface):
         return TripSchema.objects(id__ne=dto.id, departure_station=dto.departure_station, arrival_station=dto.arrival_station).count() > 0
     
     # CREATE
-    def create(json:dict):
+    def createOne(json:dict):
         dto = TripDTO(json=json)
         dto.id = None
         

@@ -15,37 +15,32 @@ def checkNone(func):
 
     return inner1
 
-@checkNone
-def check_str(field_name, value, required=True):
+def check_str_raise(field_name, value, required=True):
     if not isinstance(value, str):
         raise TypeError(f"{field_name} : must be a string")
 
-@checkNone
-def check_int(field_name, value, required=True):
+def check_int_raise(field_name, value, required=True):
     if not isinstance(value, int):
         try:
             value = int(value)
         except:
             raise TypeError(f"{field_name} : must be an integer")
 
-@checkNone
-def check_float(field_name, value, required=True):
+def check_float_raise(field_name, value, required=True):
     if not isinstance(value, float):
         try:
             value = float(value)
         except:
             raise TypeError(f"{field_name} : must be a float")
 
-@checkNone
-def check_id(field_name, value, required=True):
-    check_str(field_name, value, required=required)
+def check_id_raise(field_name, value, required=True):
+    check_str_raise(field_name, value, required=required)
      
     if not ObjectId.is_valid(value):
         raise TypeError(f"{field_name} : must be a valid ObjectId")
   
-@checkNone
-def check_slug(field_name, value, required=True):
-    check_str(field_name, value, required=required)
+def check_slug_raise(field_name, value, required=True):
+    check_str_raise(field_name, value, required=required)
       
     if " " in value:
         raise TypeError(f"{field_name} : must not contain spaces")
@@ -55,12 +50,43 @@ def check_slug(field_name, value, required=True):
         raise TypeError(f"{field_name} : must not contain dots")
     if not value.islower():
         raise TypeError(f"{field_name} : must be lowercase")
- 
-@checkNone 
-def check_zip_code(field_name, value, required=True):
-    check_str(field_name, value, required=required)
+  
+def check_zip_code_raise(field_name, value, required=True):
+    check_str_raise(field_name, value, required=required)
     
     if (len(value) != 5):
         raise TypeError(f"{field_name} : must be 5 characters long")
     if (not value.isnumeric()):
         raise TypeError(f"{field_name} : must be a number")
+    
+@checkNone
+def check_str(field_name, value, required=True) -> str:
+    check_str_raise(field_name, value, required=required)
+    return value
+
+@checkNone
+def check_int(field_name, value, required=True) -> int:
+    check_int_raise(field_name, value, required=required)
+    return int(value)
+
+@checkNone
+def check_float(field_name, value, required=True) -> float:
+    check_float_raise(field_name, value, required=required)
+    return float(value)
+
+@checkNone
+def check_id(field_name, value, required=True) -> ObjectId:
+    check_id_raise(field_name, value, required=required)
+    if isinstance(value, ObjectId):
+        return value
+    return ObjectId(value)
+
+@checkNone
+def check_slug(field_name, value, required=True) -> str:
+    check_slug_raise(field_name, value, required=required)
+    return value
+
+@checkNone
+def check_zip_code(field_name, value, required=True) -> str:
+    check_zip_code_raise(field_name, value, required=required)
+    return value

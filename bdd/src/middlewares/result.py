@@ -17,6 +17,7 @@ def resultManager(type: ResultManagerType):
                 else:
                     return str(func(*args, **kwargs)), 200
             except Exception as e:
+                #raise e
                 return str(e), 400
         # Renaming the function name:
         resultManagerInner2.__name__ = func.__name__

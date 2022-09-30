@@ -23,7 +23,7 @@ app.config["MONGODB_SETTINGS"] = [
 ]
 db.init_app(app)
 
-#app.register_blueprint(trip_request, url_prefix='/trip')
+app.register_blueprint(trip_request, url_prefix='/trip')
 app.register_blueprint(train_station_request, url_prefix='/train_station')
  
 @app.route('/')

@@ -5,7 +5,7 @@ class DtoInterface:
         Raises:
             NotImplementedError: not implemented
         """        
-        raise NotImplementedError
+        raise NotImplementedError("Not implemented")
     
     def toJson(self):
         """Convert the dto to a json
@@ -13,7 +13,7 @@ class DtoInterface:
         Raises:
             NotImplementedError: not implemented
         """        
-        raise NotImplementedError
+        raise NotImplementedError("Not implemented")
         
     def __fromJson(self, json):
         """Convert a json to a dto
@@ -24,7 +24,7 @@ class DtoInterface:
         Raises:
             NotImplementedError: not implemented
         """        
-        raise NotImplementedError
+        raise NotImplementedError("Not implemented")
         
     def toDao(self):
         """Convert the dto to a dao
@@ -32,7 +32,7 @@ class DtoInterface:
         Raises:
             NotImplementedError: not implemented
         """        
-        raise NotImplementedError
+        raise NotImplementedError("Not implemented")
         
     def __fromDao(self, dao):  
         """Convert a dao to a dto
@@ -43,4 +43,4 @@ class DtoInterface:
         Raises:
             NotImplementedError: not implemented
         """        
-        raise NotImplementedError
+        raise NotImplementedError("Not implemented")
