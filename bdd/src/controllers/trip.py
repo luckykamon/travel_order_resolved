@@ -2,38 +2,38 @@ import sys
 from flask import blueprints, request, jsonify
 
 sys.path.append("..")
-from middlewares.result import resultManager
 from middlewares.auth import isAuth
+from middlewares.result import resultManager, ResultManagerType
 from services.trip import Trip as TripService
 
 trip_request = blueprints.Blueprint('trip', __name__)
 
-@isAuth
-@resultManager
 @trip_request.get('/')
+@isAuth
+@resultManager(ResultManagerType.JSON)
 def get_trips():
     return jsonify(TripService.getJsonMany())
 
-@isAuth
-@resultManager
 @trip_request.get('/<id>')
+@isAuth
+@resultManager(ResultManagerType.JSON)
 def get_trip(id):
     return TripService.getJsonOneById(id)
 
-@isAuth
-@resultManager
 @trip_request.post('/')
+@isAuth
+@resultManager(ResultManagerType.JSON)
 def create_trip():
     return TripService.createOne(request.json)
 
-@isAuth
-@resultManager
 @trip_request.put('/<id>')
+@isAuth
+@resultManager(ResultManagerType.JSON)
 def update_trip(id):
     return TripService.updateOne(id, request.json)
 
-@isAuth
-@resultManager
 @trip_request.delete('/<id>')
+@isAuth
+@resultManager(ResultManagerType.TEXT)
 def delete_trip(id):
     return TripService.deleteOne(id)

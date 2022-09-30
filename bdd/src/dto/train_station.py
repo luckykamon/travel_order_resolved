@@ -1,13 +1,22 @@
 import sys
 from .utils.check_type import check_id, check_str, check_slug, check_zip_code, check_float
-from .utils.check_json import exist_in_json_or_raise
+from .utils.check_json import check_json, get_key
+from .dto_interface import DtoInterface
 
 sys.path.append("../..")
 from schemas.train_station import TrainStation as TrainStationSchema
 
-class TrainStation:    
-    def __init__(self):
-        pass
+class TrainStation(DtoInterface):    
+    def __init__(self, json=None, dao=None):
+        if (json is not None) and (dao is not None):
+            raise ValueError("Only one parameter is required (json or dao)")
+        if (json is None) and (dao is None):
+            raise ValueError("One parameter is required (json or dao)")
+        
+        if json is not None:
+            self.__fromJson(json)
+        if dao is not None:
+            self.__fromDao(dao)
         
     @property
     def id(self):
@@ -15,7 +24,8 @@ class TrainStation:
         
     @id.setter
     def id(self, value):
-        self._id = check_id("id", value)
+        check_id("id", value)
+        self._id = value
         
     @property
     def name(self):
@@ -23,7 +33,8 @@ class TrainStation:
         
     @name.setter
     def name(self, value):
-        self._name = check_str("name", value)
+        check_str("name", value)
+        self._name = value
         
     @property
     def slug(self):
@@ -31,7 +42,8 @@ class TrainStation:
 
     @slug.setter
     def slug(self, value):
-        self._slug = check_slug("slug", value)
+        check_slug("slug", value)
+        self._slug = value
         
     @property
     def address(self):
@@ -39,7 +51,8 @@ class TrainStation:
         
     @address.setter
     def address(self, value):
-        self._address = check_str("address", value)
+        check_str("address", value)
+        self._address = value
         
     @property
     def zip_code(self):
@@ -47,7 +60,8 @@ class TrainStation:
         
     @zip_code.setter
     def zip_code(self, value):
-        self._zip_code = check_zip_code("zip_code", value)
+        check_zip_code("zip_code", value)
+        self._zip_code = value
         
     @property
     def city(self):
@@ -55,7 +69,8 @@ class TrainStation:
         
     @city.setter
     def city(self, value):
-        self._city = check_str("city", value)
+        check_str("city", value)
+        self._city = value
         
     @property
     def country(self):
@@ -63,7 +78,8 @@ class TrainStation:
     
     @country.setter
     def country(self, value):
-        self._country = check_str("country", value)
+        check_str("country", value)
+        self._country = value
         
     @property
     def latitude(self):
@@ -71,7 +87,8 @@ class TrainStation:
         
     @latitude.setter
     def latitude(self, value):
-        self._latitude = check_float("latitude", value)
+        check_float("latitude", value)
+        self._latitude = value
         
     @property
     def longitude(self):
@@ -79,7 +96,8 @@ class TrainStation:
         
     @longitude.setter
     def longitude(self, value):
-        self._longitude = check_float("longitude", value)
+        check_float("longitude", value)
+        self._longitude = value
         
     def toJson(self):
         return {
@@ -94,25 +112,37 @@ class TrainStation:
             "longitude": self.longitude
         }
         
-    def fromJson(self, json):
-        self.id = exist_in_json_or_raise(json, "id")
-        self.name = exist_in_json_or_raise(json, "name")
-        self.slug = exist_in_json_or_raise(json, "slug")
-        self.address = exist_in_json_or_raise(json, "address")
-        self.zip_code = exist_in_json_or_raise(json, "zip_code")
-        self.city = exist_in_json_or_raise(json, "city")
-        self.country = exist_in_json_or_raise(json, "country")
-        self.latitude = exist_in_json_or_raise(json, "latitude")
-        self.longitude = exist_in_json_or_raise(json, "longitude")
+    def __fromJson(self, json):
+        check_json(json)
+        
+        self.id = get_key(json, "id")
+        self.name = get_key(json, "name")
+        self.slug = get_key(json, "slug")
+        self.address = get_key(json, "address")
+        self.zip_code = get_key(json, "zip_code")
+        self.city = get_key(json, "city")
+        self.country = get_key(json, "country")
+        self.latitude = get_key(json, "latitude")
+        self.longitude = get_key(json, "longitude")
         
     def toDao(self):
         train_station = TrainStationSchema()
-        for key, value in self.toJson().items():
-            if value is not None:
-                setattr(train_station, key, value)
+        
+        if self.id is not None:
+            train_station.id = self.id
+        
+        train_station.name = self.name
+        train_station.slug = self.slug
+        train_station.address = self.address
+        train_station.zip_code = self.zip_code
+        train_station.city = self.city
+        train_station.country = self.country
+        train_station.latitude = self.latitude
+        train_station.longitude = self.longitude
+
         return train_station
         
-    def fromDao(self, dao):     
+    def __fromDao(self, dao):  
         self.id = str(dao.id)
         self.name = dao.name
         self.slug = dao.slug

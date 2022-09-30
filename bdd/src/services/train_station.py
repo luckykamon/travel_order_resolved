@@ -9,9 +9,7 @@ from dto.train_station import TrainStation as TrainStationDTO
 class TrainStation(CRUBInterface):
     # GET 
     def __getJsonFromDao(dao:TrainStationSchema):        
-        train_station = TrainStationDTO()
-        train_station.fromDao(dao)
-        return train_station.toJson()
+        return TrainStationDTO(dao=dao).toJson()
     
     def __getMany():
         return TrainStationSchema.objects
@@ -68,9 +66,8 @@ class TrainStation(CRUBInterface):
         return TrainStationSchema.objects(id__ne=dto.id, address=dto.address, zip_code=dto.zip_code, city=dto.city, country=dto.country).count() > 0
 
     # CREATE
-    def createOne(json):   
-        dto = TrainStationDTO()
-        dto.fromJson(json)
+    def createOne(json:dict):   
+        dto = TrainStationDTO(json=json)
         dto.id = None
         
         TrainStation.__ckeckFields(dto)
@@ -81,21 +78,21 @@ class TrainStation(CRUBInterface):
         return TrainStation.__getJsonFromDao(train_station)
     
     # UPDATE
-    def updateOne(id, json):
-        dto = TrainStationDTO()
-        dto.fromJson(json)
-        dto.id = id
-        
-        TrainStation.__ckeckFields(dto)
-        
+    def updateOne(id, json:dict):
         train_station = TrainStation.__getOneById(id)
+    
+        dto = TrainStationDTO(dao=train_station)
         
         update_keys = ["name", "slug", "address", "zip_code", "city", "country", "latitude", "longitude"]
-        for key, value in dto.toJson().items():
+        for key, value in json.items():
             if (value is not None) and (key in update_keys):
-                train_station.update(**{key: value})
+                setattr(dto, key, value)                
+    
+        TrainStation.__ckeckFields(dto)
         
-        train_station.reload()
+        train_station = dto.toDao()
+        train_station.save()
+        
         return TrainStation.__getJsonFromDao(train_station)
     
     # DELETE
@@ -104,4 +101,3 @@ class TrainStation(CRUBInterface):
         train_station.delete()
         
         return "Train station deleted"
-        

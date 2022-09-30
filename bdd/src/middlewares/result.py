@@ -1,12 +1,24 @@
-import sys
+from enum import Enum
+from flask import jsonify
 
-sys.path.append("..")
-from errors.auth_exception import AuthException
+class ResultManagerType(Enum):
+    JSON = "json"
+    TEXT = "text"
 
-def resultManager(func):
-    def inner1(*args, **kwargs):
-        try:
-            return func(*args, **kwargs), 200
-        except Exception as e:
-            return str(e), 400
-    return inner1
+def resultManager(type: ResultManagerType):
+    if not isinstance(type, ResultManagerType):
+        raise ValueError("The type must be a ResultManagerType")
+    
+    def resultManagerInner1(func):
+        def resultManagerInner2(*args, **kwargs):
+            try:
+                if type == ResultManagerType.JSON:
+                    return jsonify(func(*args, **kwargs)), 200
+                else:
+                    return str(func(*args, **kwargs)), 200
+            except Exception as e:
+                return str(e), 400
+        # Renaming the function name:
+        resultManagerInner2.__name__ = func.__name__
+        return resultManagerInner2        
+    return resultManagerInner1

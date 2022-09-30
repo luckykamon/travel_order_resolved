@@ -36,7 +36,7 @@ class CRUBInterface:
         """            
         raise NotImplementedError
     
-    def __getOneById(id):
+    def __getOneById(id:str):
         """get one database object from id
 
         Args:
@@ -50,7 +50,7 @@ class CRUBInterface:
         """
         raise NotImplementedError
     
-    def getJsonOneById(id):
+    def getJsonOneById(id:str):
         """get one json of database object from id
 
         Args:
@@ -78,7 +78,7 @@ class CRUBInterface:
         raise NotImplementedError
 
     # CREATE
-    def createOne(json):   
+    def createOne(json:dict):   
         """create one database object
         
         Args:
@@ -93,7 +93,7 @@ class CRUBInterface:
         raise
     
     # UPDATE
-    def updateOne(id, json):
+    def updateOne(id:str, json:dict):
         """update one database object from id
 
         Args:
@@ -109,7 +109,7 @@ class CRUBInterface:
         raise NotImplementedError
     
     # DELETE
-    def deleteOne(id):
+    def deleteOne(id:str):
         """delete one database object from id
 
         Args:

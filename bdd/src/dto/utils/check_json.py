@@ -1,11 +1,14 @@
 
-def __check_json(json):
+def check_json(json):
     if json is None:
         raise ValueError("No JSON found")
         
-def exist_in_json_or_raise(json, key):
-    __check_json(json)
-    
-    if key not in json.keys():
-        raise ValueError("Missing fields")
+def exist_in_json(json, key):
+    return key not in json.keys()
+
+def get_key(json, key):
+    if exist_in_json(json, key):
+        return None
     return json[key]
+    
+    

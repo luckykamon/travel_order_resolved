@@ -12,10 +12,13 @@ def __auth_token(token):
         raise AuthException("Invalid token")
 
 def isAuth(func):
-    def inner1(*args, **kwargs):
+    def isAuthInner1(*args, **kwargs):
         try:
             __auth_token(request.headers.get('api_key'))
             return func(*args, **kwargs)
         except AuthException as e:
             return str(e), 401
-    return inner1
+        
+    # Renaming the function name:
+    isAuthInner1.__name__ = func.__name__
+    return isAuthInner1

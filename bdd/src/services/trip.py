@@ -10,11 +10,9 @@ from dto.trip import Trip as TripDTO
 class Trip(CRUBInterface):
     # GET
     def __getJsonFromDao(dao:TripSchema):      
-        trip = TripDTO()
-        trip.fromDao(dao)
-        return_json = trip.toJson()
-        return_json["departure_station"] = TrainStationService.getJsonOneById(trip.departure_station)
-        return_json["arrival_station"] = TrainStationService.getJsonOneById(trip.arrival_station)
+        return_json = TripDTO(dao=dao).toJson()
+        return_json["departure_station"] = TrainStationService.getJsonOneById(return_json["departure_station"])
+        return_json["arrival_station"] = TrainStationService.getJsonOneById(return_json["arrival_station"])
         return return_json
     
     def __getMany():
@@ -64,9 +62,8 @@ class Trip(CRUBInterface):
         return TripSchema.objects(id__ne=dto.id, departure_station=dto.departure_station, arrival_station=dto.arrival_station).count() > 0
     
     # CREATE
-    def create(json):
-        dto = TripDTO()
-        dto.fromJson(json)
+    def create(json:dict):
+        dto = TripDTO(json=json)
         dto.id = None
         
         Trip.__ckeckFields(dto)
@@ -77,25 +74,25 @@ class Trip(CRUBInterface):
         return Trip.__getJsonFromDao(trip)
     
     # UPDATE
-    def update(id, json):
-        dto = TripDTO()
-        dto.fromJson(json)
-        dto.id = id
-        
-        Trip.__ckeckFields(dto)
-        
+    def updateOne(id, json:dict):
         trip = Trip.__getOneById(id)
         
+        dto = TripDTO(dao=trip)        
+        
         update_keys = ["duration"]
-        for key, value in dto.toJson().items():
+        for key, value in json.items():
             if (value is not None) and (key in update_keys):
-                trip.update(**{key: value})
+                setattr(dto, key, value)  
                 
-        trip.reload()
+        Trip.__ckeckFields(dto)
+        
+        trip = dto.toDao()
+        trip.save()
+                
         return Trip.__getJsonFromDao(trip)
     
     # DELETE
-    def delete(id):
+    def deleteOne(id):
         trip = Trip.__getOneById(id)
         trip.delete()
         
