@@ -29,11 +29,11 @@ elif [ "$1" = "restart" ]; then
 
     ./app.sh start $2
 elif [ "$1" = "test" ]; then
-    if [ "$(docker ps -q -f name=bdd_api)" ]; then
+    if [ "$(docker ps -q -f name=ia_api)" ]; then
         echo "Running the tests"
 
         # Run the tests
-        docker exec -it -w /app bdd_api pytest
+        docker exec -it -w /app ia_api pytest
     else
         echo "Run the application before running the tests"
     fi

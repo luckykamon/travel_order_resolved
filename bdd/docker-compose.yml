@@ -1,10 +1,10 @@
 services:
-  bdd_api:
+  ia_api:
     build: 
       context: .
       dockerfile: Dockerfile
-    image: bdd_api:1.0
-    container_name: bdd_api
+    image: ia_api:1.0
+    container_name: ia_api
     restart: always
     environment:
       - ENV_VAR=${ENV_VAR}
@@ -19,21 +19,21 @@ services:
     volumes:
       - ./src:/app
   
-  bdd_db:
+  ia_bdd:
     image: mongo:5.0.8
-    container_name: bdd_db
+    container_name: ia_bdd
     restart: always
     ports:
       - ${MONGODB_PORT}:27017
     volumes:
-      - bdd_data:/data/db
+      - ia_bdd:/data/db
     environment:
       MONGO_INITDB_ROOT_USERNAME: ${DB_USER}
       MONGO_INITDB_ROOT_PASSWORD: ${DB_PASSWORD}
 
-  swagger:
+  ia_swagger:
     image: swaggerapi/swagger-ui:v4.14.0
-    container_name: swagger
+    container_name: ia_swagger
     restart: always
     ports:
       - ${SWAGGER_PORT}:8080
@@ -43,4 +43,4 @@ services:
       SWAGGER_JSON: /srv/swagger.yaml
 
 volumes:
-  bdd_data:
+  ia_bdd:
