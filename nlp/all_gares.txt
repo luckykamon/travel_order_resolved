@@ -466,6 +466,7 @@ Bretoncelles
 Bretteville Norrey
 Brettnach
 Breuil Romain
+Briancon
 Briançon
 Briare
 Bricon
@@ -1792,6 +1793,7 @@ Le Teil
 Le Teil Sablons
 Le Theil de Bretagne
 Le Theil la Rouge
+Le Thillot
 Le Thillot Rue Verdun
 Le Thillot République
 Le Thor
@@ -1916,6 +1918,7 @@ Longpont
 Longpré Corps Saints
 Longroy Gamaches
 Longueau
+Longueil
 Longueil Annel
 Longueil Ste Marie
 Longuerue Vieux Manoir
@@ -1972,6 +1975,7 @@ Lus La Croix Haute 1075
 Lus la Croix Haute
 Luscan Pont
 Lusignan
+Lusigny
 Lusigny sur Barse Centr
 Lusigny sur Barse RN19
 Lussac les Châteaux
@@ -1992,6 +1996,7 @@ Luzy sur Marne
 Luçay le Male
 Luçon
 Lycée Fernand Léger
+Lyon
 Lyon Gorge de Loup
 Lyon Jean Macé
 Lyon Part Dieu
@@ -2072,6 +2077,7 @@ Marquixanes
 Marsac
 Marsac en Livradois
 Marseillan Plage
+Marseille
 Marseille Blancarde
 Marseille St Charles
 Marseille en Beauvaisis
