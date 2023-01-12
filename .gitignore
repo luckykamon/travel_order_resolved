@@ -1,2 +1,5 @@
 Project_data/*
 !Project_data/.gitkeep
+!Project_data/data_sncf/.gitkeep
+/front/node_modules/
+/front/.env

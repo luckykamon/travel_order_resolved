@@ -1,11 +1,10 @@
 services:
   ia_api:
-    build: 
+    build:
       context: .
       dockerfile: Dockerfile
     image: ia_api:1.0
     container_name: ia_api
-    restart: always
     environment:
       - ENV_VAR=${ENV_VAR}
       - API_TOKEN=${API_TOKEN}
@@ -18,11 +17,10 @@ services:
       - ${API_PORT}:3000
     volumes:
       - ./src:/app
-  
+
   ia_bdd:
     image: mongo:5.0.8
     container_name: ia_bdd
-    restart: always
     ports:
       - ${MONGODB_PORT}:27017
     volumes:
@@ -34,7 +32,6 @@ services:
   ia_swagger:
     image: swaggerapi/swagger-ui:v4.14.0
     container_name: ia_swagger
-    restart: always
     ports:
       - ${SWAGGER_PORT}:8080
     volumes:

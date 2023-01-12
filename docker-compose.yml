@@ -6,7 +6,7 @@ services:
       context: speechtotext
       dockerfile: Dockerfile
     ports:
-      - "5000:5000"
+      - "6000:5000"
   nlp:
     container_name: nlp
     build:
@@ -14,4 +14,20 @@ services:
       dockerfile: Dockerfile
     ports:
       - "8989:8989"
-
+  front:
+    container_name: front
+    build:
+      context: front
+      dockerfile: Dockerfile
+    ports:
+      - "3006:3006"
+    depends_on:
+      - speech_to_text
+      - nlp
+  graph:
+    container_name: graph
+    build:
+      context: graph
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
