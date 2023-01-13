@@ -31,6 +31,14 @@ def get_result(list_data, depuis, cities):
             return(gares)
     return(gares)
 
+def may_reverse(data, depuis, gares):
+    for i in depuis:
+        if i in data:
+            idx = data.find(i)
+            if idx > data.find(gares[0].lower()) and idx < data.find(gares[1].lower()):
+                gares.reverse()
+    return(gares)
+
 def tokenized(data,filtre_stopfr, sp_pattern):
     d = " ".join(str(x) for x in sp_pattern(data))
     return (filtre_stopfr(word_tokenize(d, language="french")))
@@ -76,6 +84,11 @@ def trip():
         # gares = get_result(list_d, depuis, cities)
         if len(gares) != 2:
             return ({f"Not exactly 2 station given" : gares}, 400)
+        print(f"data.find(gares[1]) = {data.find(gares[1].lower())} and data.find(gares[0]) = {data.find(gares[0].lower())}")
+        if data.find(gares[1].lower()) < data.find(gares[0].lower()):
+            gares.reverse()
+        depuis = getLines("depuis.txt")
+        gares = may_reverse(data, depuis, gares)
         return ({"Departure": gares[0], "Destination": gares[1]})
     except Exception as e:
         return ({"Cannot process" : str(e)}, 500)
