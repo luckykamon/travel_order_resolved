@@ -97,8 +97,7 @@ def update_graph_and_chemin_dijkstra(graph_data, graph_dijkstra, chemin_dijkstra
     # On va récupérer la destination de ce chemin
     destination_chemin_court_actuel = chemin_court_actuel["destination"]
     # On va récupérer les voisins de la destination du chemin le plus court actuel
-    voisins_destination_chemin_court_actuel = get_voisins(graph_data, destination_chemin_court_actuel,
-                                                          chemin_court_actuel["parcours"])
+    voisins_destination_chemin_court_actuel = get_voisins(graph_data, destination_chemin_court_actuel, chemin_court_actuel["parcours"])
     # On va ajouter les voisins de la destination du chemin le plus court actuel au graph_dijkstra
     new_chemins = add_voisins_from_chemin(graph_dijkstra, chemin_court_actuel, voisins_destination_chemin_court_actuel)
     # Supprimer le premier element de la liste chemin_dijkstra

@@ -61,7 +61,7 @@ def get_graph_routes(data = None):
                 if len(route_long_name_split) > 2:
                     for nb_arrete in range(len(route_long_name_split) - 1):
                         graph.append(
-                            {"route_id": route_id, "departure": route_long_name_split[nb_arrete], "destination": route_long_name_split[nb_arrete + 1],
+                            {"route_id": route_id + ";" + str(nb_arrete), "departure": route_long_name_split[nb_arrete], "destination": route_long_name_split[nb_arrete + 1],
                              "poids": random.random()})
 
         # write graph to json file
