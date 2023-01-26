@@ -1,6 +1,8 @@
 import flask
 import flask_cors
 from graph import index as graph_index
+from build import index as build_index
+from reformat import index as test_index
 
 app = flask.Flask(__name__)
 flask_cors.CORS(app, resources={r'/*': {'origins': '*'}})
@@ -16,6 +18,14 @@ def graph():
         return (graph_index.index(departure, destination, timestamp), 200)
     # except Exception as e:
     #     return ({"Cannot process" : str(e)}, 500)
+
+@app.route('/build', methods=["GET"])
+def build():
+    return (build_index.index(), 200)
+
+@app.route('/test', methods=["GET"])
+def test():
+    return (test_index.index(), 200)
 
 @app.route('/', methods=["GET"])
 def index():
