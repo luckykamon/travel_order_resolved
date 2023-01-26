@@ -2,7 +2,7 @@ import flask
 import flask_cors
 from graph import index as graph_index
 from build import index as build_index
-from reformat import index as test_index
+from reformat import index as reformat_index
 
 app = flask.Flask(__name__)
 flask_cors.CORS(app, resources={r'/*': {'origins': '*'}})
@@ -23,9 +23,9 @@ def graph():
 def build():
     return (build_index.index(), 200)
 
-@app.route('/test', methods=["GET"])
+@app.route('/reformat', methods=["GET"])
 def test():
-    return (test_index.index(), 200)
+    return (reformat_index.index(), 200)
 
 @app.route('/', methods=["GET"])
 def index():

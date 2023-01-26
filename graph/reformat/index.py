@@ -29,6 +29,8 @@ def index():
             all_city += data_to_add_column['route_long_name_parse'][i].split(";")
     # supprimer les doublons de all_city
     all_city = list(set(all_city))
+    # trier par ordre alphabétique
+    all_city.sort()
     # enregistrer all_city dans un fichier en txt et en revenant à la ligne à chaque élément
     with open('../Project_data/data_sncf/all_city.txt', 'w') as f:
         for city in all_city:
