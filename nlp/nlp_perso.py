@@ -3,11 +3,24 @@ import flask
 from nltk.corpus import stopwords
 from nltk import word_tokenize
 import re
+import difflib
 import flask_cors
 # import requests
 
+
 app = flask.Flask(__name__)
 flask_cors.CORS(app, resources={r'/*': {'origins': '*'}})
+
+def removeGare(txt: str):
+    txt = txt.lower()
+    if (txt.find("gare d") == 0):
+        if txt.find("gare de " == 0):
+            txt.replace("gare de ", "")
+        elif txt.find("gare d'") == 0:
+            txt.replace("gare d'", "")
+        else:
+            print(f"Cannot find pattern in {txt}")
+    return (txt.title())
 
 def getLines(filename):
     with open(filename) as file:
@@ -65,11 +78,21 @@ def trip():
             raise Exception("No data in json")
         data = flask.request.json['data'].lower()
         gares = []
-        cities = getLines("all_gares.txt")
+        cities = getLines("all_cities_with_space.txt")
         for city in cities:
             if data.find(city) != -1:
                 idx = data.find(city)
                 if (check_whole_word(city, data, idx)):
+                    gares.append(city.title())
+            datalist = data.split()
+            city_list = city.split()
+            for i in range(len(datalist) - (len(city_list) - 1)):
+                if (len(gares) == 2):
+                    break
+                s = ""
+                for j in range(len(city_list)):
+                    s += datalist[i + j]
+                if (difflib.SequenceMatcher(None, city.lower(), s.lower()).ratio() * 100 >= 90 and not city.title() in gares):
                     gares.append(city.title())
         # data = flask.request.json['data']
         # french_stopwords = set(stopwords.words('french'))
@@ -84,7 +107,6 @@ def trip():
         # gares = get_result(list_d, depuis, cities)
         if len(gares) != 2:
             return ({f"Not exactly 2 station given" : gares}, 400)
-        print(f"data.find(gares[1]) = {data.find(gares[1].lower())} and data.find(gares[0]) = {data.find(gares[0].lower())}")
         if data.find(gares[1].lower()) < data.find(gares[0].lower()):
             gares.reverse()
         depuis = getLines("depuis.txt")
@@ -104,23 +126,23 @@ def trip():
 #     except Exception as e:
 #         return ({"Cannot process" : str(e)}, 500)
 
-def test(data, prov, dest):
-    french_stopwords = set(stopwords.words('french'))
-    filtre_stopfr =  lambda text: [token for token in text if token.lower() not in french_stopwords]
-    sp_pattern = re.compile("""[\.\!\"\s\?\-\,\']+""", re.M).split
-    list_d = tokenized(data, filtre_stopfr, sp_pattern)
-    cities = getLines("all_gares.txt")
-    depuis = getLines("depuis.txt")
-    gares = get_result(list_d, depuis, cities)
-    if (len(gares) != 2 or gares[0] != prov or gares[1] != dest):
-        if len(gares) != 2:
-            return False
-        if (gares[0] != prov):
-            print(f"{gares[0]} != {prov}")
-        elif (gares[1] != dest):
-            print(f"{gares[1]} != {dest}")
-        return False
-    return True
+# def test(data, prov, dest):
+#     french_stopwords = set(stopwords.words('french'))
+#     filtre_stopfr =  lambda text: [token for token in text if token.lower() not in french_stopwords]
+#     sp_pattern = re.compile("""[\.\!\"\s\?\-\,\']+""", re.M).split
+#     list_d = tokenized(data, filtre_stopfr, sp_pattern)
+#     cities = getLines("all_gares.txt")
+#     depuis = getLines("depuis.txt")
+#     gares = get_result(list_d, depuis, cities)
+#     if (len(gares) != 2 or gares[0] != prov or gares[1] != dest):
+#         if len(gares) != 2:
+#             return False
+#         if (gares[0] != prov):
+#             print(f"{gares[0]} != {prov}")
+#         elif (gares[1] != dest):
+#             print(f"{gares[1]} != {dest}")
+#         return False
+#     return True
 
 
 @app.route('/', methods=["GET"])

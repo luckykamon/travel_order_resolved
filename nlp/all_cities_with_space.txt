@@ -1,0 +1,562 @@
+abancourt
+abbeville
+agen
+aillevillers
+aix
+aix en provence
+aix les bains
+albert
+albi
+alencon
+ales
+alesia
+amb
+amberieu
+amberieu en bugey
+ambert
+amiens
+amiens
+angers
+angers st laud
+angouleme
+annecy
+annemasse
+annonay
+apach
+arcachon
+argentan
+argenton
+argenton sur creuse
+arras
+arvant
+ascq
+aubenas
+aubigny
+auch
+audun le roman
+aulnoye
+aulnoye aymeries
+aurillac
+austerlitz
+autun
+auxerre
+auxerre st gervais
+auxonne
+avallon
+avignon
+avignon centre
+bagnoles
+bale
+bar le duc
+bar le duc
+barr
+bayonne
+beauvais
+bedarieux
+bedous
+belfort
+belfort ville
+bellegarde
+bellegarde sur valserine
+bening
+bergerac
+besancon
+besancon viotte
+bettembourg
+beziers
+bitche
+blois
+bollwiller
+bordeaux
+bort les orgues
+boulogne
+boulogne ville
+bourg
+bourg en bresse
+bourg st maurice
+bourges
+bouxwiller
+breaute
+breil sur roya
+bressuire
+brest
+bri
+briancon
+brignais
+brioude
+briouze
+brive
+brive la gaillarde
+bruyeres
+busigny
+bussang
+caen
+calais
+calais ville
+cambrai
+cambrai ville
+capdenac
+carcassonne
+carhaix
+carmaux
+carpentras
+castelnaudary
+castelsarrasin
+cerbere
+cernay
+cgv
+chagny
+challes les eaux
+chalon
+chalons
+chalons en champagne
+chambery
+chambery
+chamonix
+chamonix
+chamonix mont blanc
+charle ville
+charle ville mezieres
+charleroi
+charmes
+chartres
+chateau du loir
+chateau renault
+chateau thierry
+chateaubriant
+chateaudun
+chateauroux
+chatellerault
+chaumont
+chedde
+cherbourg
+chinon
+cholet
+clamecy
+cle
+clermont
+clermont fd
+clermont ferrand
+clisson
+colmar
+colmar omnibus
+comines
+commentry
+communay
+compiegne
+comte
+conflans
+conflans jarny
+contrex
+coppet
+corbigny
+cosne
+courtalain
+courtrai
+coutances
+coutras
+cr
+creil
+crepy
+creutzwald
+culmont
+culmont chalindrey
+decize
+delle
+die
+diemeringen
+dieppe
+digoin
+dijon
+dijon ville
+din
+dinan
+dives cabourg
+dn
+dol
+dole
+don bethune
+douai
+dourdan
+dreux
+droue
+dunkerque
+durtol
+eguzon
+elbeuf
+epernay
+epinal
+erstein
+etang
+etaples
+evian
+evian les bains
+fecamp
+felletin
+ferrand
+figeac
+firminy
+fismes
+flers
+fny
+folligny
+forbach
+fougeres
+franche
+franois
+frasne
+freiburg
+frohmuhl
+gannat
+gap
+ge
+geneve
+gien
+givet
+givorsville
+gramat
+granville
+grenoble
+grenoble gieres
+gueret
+guingamp
+hagondange
+haguenau
+hattmatt
+hazebrouck
+hendaye
+herrlisheim
+hirson
+igney avricourt
+ingwiller
+issoire
+issoudun
+issurtille
+janze
+jeumont
+kehl
+kruth
+l'aigle
+la bresse
+la chaux de fonds
+la ferte sur chiers
+la motte
+la roche
+la roche migennes
+la roche sur foron
+la roche sur yon
+la rochelle
+la rochelle porte dauphine
+la tour de carol
+labastide
+langogne
+langon
+langres
+lannion
+laon
+lauterbourg
+laval
+le blanc
+le creusot
+le croisic
+le grau du roi
+le havre
+le locle
+le mans
+le puy
+le treport
+lens
+les arcs
+les aubrais
+les laumes
+les laumes
+les sables
+les sables d'olonnes
+libercourt
+libourne
+lichtenberg
+lille
+lille flandres
+limeray
+limoges
+lisieux
+lnnsstl
+loches
+longuyon
+longwy
+lons le saunier
+lorient
+lozanne
+lpu
+ltp
+lucay le male
+luchon
+luchon
+lucon
+luneville
+luneville
+lutzelbourg
+luxembourg
+luzy
+ly
+lyon
+lyon part dieu
+lyon perrache
+lyon st paul
+macau
+macon
+marseille
+marseille st charles
+marvejols
+matabiau
+maubeuge
+mauriac
+maurienne
+mazamet
+mende
+menton
+metz
+metzeral
+metzville
+mezieres
+millau
+miramas
+mirecourt
+mob
+mod
+modane
+molsheim
+mommenheim
+mondoubleau
+mont de marsan
+montargis
+montbrison
+montchanin
+montlucon
+montmedy
+montpellier
+montpellier st roch
+morez
+morhange
+morteau
+morvan
+mouchard
+moulins
+moulins sur allier
+mouscron
+mulhouse
+mulhouse ville
+munster
+namur
+nancy
+nancy
+nancy ville
+nantes
+nantes
+narbonne
+neufchateau
+neuilly les dijon
+neussargues
+neustadt
+nevers
+nice
+nice ville
+niederbronn
+nimes
+niort
+nogent
+nogent sur seine
+nouan
+obermodern
+offenburg
+onville
+orange
+orchies
+orl
+orleans
+oyonnax
+pagny moselle
+paimpol
+paray
+paray le monial
+paris
+paris bercy
+paris vaugirard
+pau
+pautarbes
+paz
+pdb
+perigueux
+perpignan
+perrache
+persan
+persan beaumont
+pertuis
+pessac
+pierrelatte
+pointe de grave
+poitiers
+pont audemer
+pont st vincent
+pontarlier
+pornic
+portbou
+quillan
+quimper
+quimperle
+rang du fliers
+re
+redon
+reims
+reims
+remilly
+remiremont
+rennes
+res
+rethel
+revigny
+ribeauville
+riom chatel guyon
+riquewihr
+rives
+roa
+roanne
+rochefort
+rodez
+roeschwoog
+rolleville
+romans
+romilly
+romorantin
+romorantin blanc argent
+rothau
+rouen 
+rouen 
+royan
+royan
+saales
+saales
+saarbrucken
+sable
+sag
+sainbel
+salbris
+sancerre
+sarlat
+sarralbe
+sarre union
+sarrebourg
+sarrebruck
+sarrebrucken
+sarreguemines
+saumur
+saverne
+se
+sedan
+selestat
+selestat omnibus
+serezin
+serqueux
+seurre
+sewen
+sisteron
+soissons
+souillac
+st aignan
+st amand
+st andre legaz
+st brieuc
+st chely
+st chely d'apcher
+st claude
+st denis pres martel
+st die
+st die
+st dizier
+st dizier
+st eloy
+st etienne
+st etienne chateaucreux
+st flour
+st germain
+st gervais
+st gervais les bains le fayet
+st gilles croix de vie
+st jean pied de port
+st just
+st lo
+st louis
+st malo
+st marcellin
+st mariens
+st nazaire
+st paul
+st pierre
+st pierre de chandieu
+st pol
+st pol
+st priest
+st quentin
+st rambert
+st vit
+st yrieix
+ste marie aux mines
+stes
+strasbourg
+strasbourg krimmeri
+surdon
+tarbes
+tende
+tergnier
+thann
+thann st jacques
+thesee
+thiers
+thionville
+thouars
+toul
+toulouse
+toulouse
+tourcoing
+tournai
+tournemire roquefort
+tours
+treves
+trouville
+trouville deauville
+troyes
+tulle
+ussel
+uzerche
+valencay
+valence
+valence ville
+valenciennes
+vallorbe
+vallorcine
+vannes
+vendome
+verdun
+vernon
+vertaizon
+vesoul
+veynes
+vic
+vichy
+vienne
+vierzon
+villars
+villefranche
+villers les pots
+vintimille
+viotte
+vire
+vitre
+vittel
+volvic
+voves
+wesserling
+wimmenau
+wissembourg
+woerth
+yvetot

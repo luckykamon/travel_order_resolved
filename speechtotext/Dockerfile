@@ -1,6 +1,6 @@
 FROM ubuntu:20.04
 ENV TZ=Europe/Paris
-EXPOSE 5000
+EXPOSE 6000
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 RUN apt-get update
 RUN apt-get install python3-pip ffmpeg flac -y

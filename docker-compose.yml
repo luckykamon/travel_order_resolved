@@ -6,7 +6,7 @@ services:
       context: speechtotext
       dockerfile: Dockerfile
     ports:
-      - "6000:5000"
+      - "6000:6000"
   nlp:
     container_name: nlp
     build:

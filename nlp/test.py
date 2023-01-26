@@ -1,55 +1,39 @@
-# import nlp_perso
 import requests
 
-r = requests.post("http://localhost:8989/trip", json={"data" : "Je souhaite aller à Rennes depuis Paris"})
-assert r.status_code == 200, f"STATUS CODE ERROR : {r.status_code}, content : {r.content}"
-assert r.json()["Departure"] == "Paris", "Wrong departure for test1"
-assert r.json()["Destination"] == "Rennes", "Wrong destination for test1"
+nb_valid_test = 1
+nb_invalid_test = 1
+PARIS="Paris"
+RENNES="Rennes"
 
-r = requests.post("http://localhost:8989/trip", json={"data" : "Je souhaite partir depuis Paris et aller à Rennes"})
-assert r.status_code == 200, f"STATUS CODE ERROR : {r.status_code}, content : {r.content}"
-assert r.json()["Departure"] == "Paris", "Wrong departure for test2"
-assert r.json()["Destination"] == "Rennes", "Wrong destination for test2"
+def make_test_trip_valid(data: str, expected_departure: str, expected_destination: str, expected_code: int):
+    global nb_valid_test
+    r = requests.post("http://localhost:8989/trip", json={"data" : data})
+    assert r.status_code == expected_code, f"STATUS CODE ERROR : {r.status_code}, content : {r.content}"
+    departure = r.json()["Departure"]
+    destination = r.json()["Destination"]
+    assert departure == expected_departure, f"Wrong departure for test {nb_valid_test}. Expected \"{expected_departure}\", got \"{departure}\""
+    assert destination == expected_destination, f"Wrong destination for test {nb_valid_test}. Expected \"{expected_destination}\", got \"{destination}\""
+    print(f"test {nb_valid_test} OK")
+    nb_valid_test += 1
 
-r = requests.post("http://localhost:8989/trip", json={"data" : "Je souhaite aller a Rennes en partant de Paris"})
-assert r.status_code == 200, f"STATUS CODE ERROR : {r.status_code}, content : {r.content}"
-assert r.json()["Departure"] == "Paris", "Wrong departure for test3"
-assert r.json()["Destination"] == "Rennes", "Wrong destination for test3"
+def make_test_trip_invalid(data: str, expected_code: int):
+    global nb_invalid_test
+    r = requests.post("http://localhost:8989/trip", json={"data" : data})
+    assert r.status_code == expected_code, f"STATUS CODE ERROR : {r.status_code}, content : {r.content}"
+    print(f"test invalid {nb_invalid_test} OK")
+    nb_invalid_test += 1
 
-r = requests.post("http://localhost:8989/trip", json={"data" : "Je souhaite aller de Rennes à Paris"})
-assert r.status_code == 200, f"STATUS CODE ERROR : {r.status_code}, content : {r.content}"
-assert r.json()["Departure"] == "Rennes", "Wrong departure for test4"
-assert r.json()["Destination"] == "Paris", "Wrong destination for test4"
+if __name__ == "__main__":
+    make_test_trip_valid(data="Je souhaite aller à Rennes depuis Paris", expected_departure=PARIS, expected_destination=RENNES, expected_code=200)
+    make_test_trip_valid(data="Je souhaite partir depuis Paris et aller à Rennes", expected_departure=PARIS, expected_destination=RENNES, expected_code=200)
+    make_test_trip_valid(data="Je souhaite aller a Rennes en partant de Paris", expected_departure=PARIS, expected_destination=RENNES, expected_code=200)
+    make_test_trip_valid(data="Je souhaite aller de Rennes à Paris", expected_departure=RENNES, expected_destination=PARIS, expected_code=200)
+    make_test_trip_valid(data="Je souhaite partir de Paris pour aller à Rennes", expected_departure=PARIS, expected_destination=RENNES, expected_code=200)
+    make_test_trip_valid(data="Je souhaite aller à Rennes à partir de Paris", expected_departure=PARIS, expected_destination=RENNES, expected_code=200)
+    make_test_trip_valid(data="Je souhaite faire Paris Rennes", expected_departure=PARIS, expected_destination=RENNES, expected_code=200)
+    make_test_trip_valid(data="Je souhaite faire Rennes Paris", expected_departure=RENNES, expected_destination=PARIS, expected_code=200)
+    make_test_trip_valid(data="Je souhaite prendre un train en provenance de Paris et a destination de Rennes", expected_departure=PARIS, expected_destination=RENNES, expected_code=200)
+    make_test_trip_valid(data="Je souhaite prendre un train a destination de Rennes et en provenance de Paris", expected_departure=PARIS, expected_destination=RENNES, expected_code=200)
+    make_test_trip_valid(data="Je souhaite prendre un train a destination de Rennes et en provenance de Pariss", expected_departure=PARIS, expected_destination=RENNES, expected_code=200)
 
-r = requests.post("http://localhost:8989/trip", json={"data" : "Je souhaite partir de Paris pour aller à Rennes"})
-assert r.status_code == 200, f"STATUS CODE ERROR : {r.status_code}, content : {r.content}"
-assert r.json()["Departure"] == "Paris", "Wrong departure for test5"
-assert r.json()["Destination"] == "Rennes", "Wrong destination for test5"
-
-r = requests.post("http://localhost:8989/trip", json={"data" : "Je souhaite aller à Rennes à partir de Paris"})
-assert r.status_code == 200, f"STATUS CODE ERROR : {r.status_code}, content : {r.content}"
-assert r.json()["Departure"] == "Paris", "Wrong departure for test6"
-assert r.json()["Destination"] == "Rennes", "Wrong destination for test6"
-
-r = requests.post("http://localhost:8989/trip", json={"data" : "Je souhaite faire Paris Rennes"})
-assert r.status_code == 200, f"STATUS CODE ERROR : {r.status_code}, content : {r.content}"
-assert r.json()["Departure"] == "Paris", "Wrong departure for test7"
-assert r.json()["Destination"] == "Rennes", "Wrong destination for test8"
-
-r = requests.post("http://localhost:8989/trip", json={"data" : "Je souhaite faire Rennes Paris"})
-assert r.status_code == 200, f"STATUS CODE ERROR : {r.status_code}, content : {r.content}"
-assert r.json()["Departure"] == "Rennes", "Wrong departure for test9"
-assert r.json()["Destination"] == "Paris", "Wrong destination for test9"
-
-r = requests.post("http://localhost:8989/trip", json={"data" : "Je souhaite prendre un train en provenance de Paris et a destination de Rennes"})
-assert r.status_code == 200, f"STATUS CODE ERROR : {r.status_code}, content : {r.content}"
-assert r.json()["Departure"] == "Paris", "Wrong departure for test10"
-assert r.json()["Destination"] == "Rennes", "Wrong destination for test10"
-
-r = requests.post("http://localhost:8989/trip", json={"data" : "Je souhaite prendre un train a destination de Rennes et en provenance de Paris"})
-assert r.status_code == 200, f"STATUS CODE ERROR : {r.status_code}, content : {r.content}"
-assert r.json()["Departure"] == "Paris", "Wrong departure for test11"
-assert r.json()["Destination"] == "Rennes", "Wrong destination for test11"
-
-r = requests.post("http://localhost:8989/trip", json={"data" : ""})
-assert r.status_code == 400, f"STATUS CODE ERROR : {r.status_code}, content : {r.content}"
+    make_test_trip_invalid(data="", expected_code=400)
