@@ -9,6 +9,6 @@ export GITHUB="true"
                                                                                         docker-compose down &&
                                                                                         docker-compose build &&
                                                                                         docker-compose up -d &&
-                                                                                        sleep(2) &&
+                                                                                        sleep 2 &&
                                                                                         curl localhost:8000 &&
                                                                                         python3 add_column.py"
