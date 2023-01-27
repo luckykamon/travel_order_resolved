@@ -3,6 +3,7 @@
 import math
 import unidecode
 import re
+from tqdm import tqdm
 
 def reformat_string(string):
     string = string.replace(" ", "")  # supprime les espaces
@@ -14,7 +15,7 @@ def reformat_string(string):
 
 def removeGare(txt: str):
     txt = txt.lower()
-    txt = txt.replace('"', '') 
+    txt = txt.replace('"', '')
 
     if (txt.find("gare d") == 0):
         if txt.find("gare de ") == 0:
@@ -43,26 +44,18 @@ def add_column():
     newStopTimesLines = stop_timesLines
     newStopTimesLines[0] = newStopTimesLines[0].replace("\n", "") + ",stop_name\n"
     test1.write(newStopTimesLines[0])
-    # print(newStopTimesLines[0])
-    for i in range(1, len(stop_timesLines)):
-    # for i in range(1, 2):
+    for i in tqdm(range(1, len(stop_timesLines))):
         stop_timeID = stop_timesLines[i].split(',')[3]
         done = False
         for j in range(1, len(stopLines)):
             stopSplited = stopLines[j].split(",")
             stopID = stopSplited[0]
-            # if j == 3838:
-            #     print(stopLines[j].split(","))
             if stop_timeID == stopID:
                 done = True
                 gareName = removeGare(stopSplited[1])
                 newStopTimesLines[i] = newStopTimesLines[i].replace("\n", "") + f",{gareName}\n"
-        if not done : 
+        if not done :
             print(f"KO for stop_timeID = {stop_timeID}")
-        percentcomput = math.trunc((i / 209130) * 100)
-        if (percentcomput > percent):
-            percent = percentcomput
-            print(f"did line {i}/209130 : {percent}% done")
         test1.write(newStopTimesLines[i])
 
 if __name__ == "__main__":

@@ -2,3 +2,10 @@ Project_data/data_sncf/routes_parses.csv
 Project_data/data_sncf/all_city.txt
 Project_data/data_sncf/pickle/*.pkl
 Project_data/graph/graph_routes.json
+/Project_data/data_sncf.zip
+/Project_data/gares_from_routes.csv
+/Project_data/timetables.csv
+/front/node_modules/
+/front/.env
+Project_data/audio/*
+/Project_data/data_sncf/stop_times_parses.csv
