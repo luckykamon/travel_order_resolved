@@ -12,6 +12,8 @@ services:
     build:
       context: nlp
       dockerfile: Dockerfile
+    volumes:
+      - ./Project_data:/Project_data
     ports:
       - "8989:8989"
   front:
@@ -29,5 +31,7 @@ services:
     build:
       context: graph
       dockerfile: Dockerfile
+    volumes:
+      - ./Project_data:/Project_data
     ports:
       - "8000:8000"

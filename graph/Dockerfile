@@ -6,6 +6,8 @@ RUN apt-get update
 RUN apt-get install python3-pip flac -y
 COPY requirements.txt .
 RUN pip install -r requirements.txt
+RUN pip install unidecode
+RUN pip install xlrd
 COPY . .
 ENTRYPOINT [ "python3" ]
 CMD [ "app.py" ]

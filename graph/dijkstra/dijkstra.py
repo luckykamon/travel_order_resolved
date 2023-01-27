@@ -1,10 +1,5 @@
 import sys
 
-import deprecation
-
-import pandas as panda
-from tqdm import tqdm
-
 sys.path.append('..')
 
 from build.index import get_graph_routes

@@ -1,6 +1,6 @@
 import pandas as panda
 import re
-import unidecode
+# import unidecode
 
 
 def index():
@@ -42,6 +42,6 @@ def reformat_string(string):
     string = string.replace(" ", "")  # supprime les espaces
     string = re.sub(r'[^\w\s]', '', string)  # supprime tous les caractères spéciaux
     string = string.lower()  # met tout en minuscules
-    string = unidecode.unidecode(string)  # supprime les accents
+    # string = unidecode.unidecode(string)  # supprime les accents
     string = string.replace("saint", "st")  # remplace saint par st
     return string
