@@ -34,6 +34,6 @@ jobs:
       - name: test build graph
         run: |
           curl localhost:8000/build
-          python3 add_column
+          python3 add_column.py
       - name: deploy on vps
         run: cd deploy && docker build -t deploy . && docker run deploy
