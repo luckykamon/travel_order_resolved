@@ -5,6 +5,9 @@ import datetime
 from tqdm import tqdm
 import pandas as panda
 import os
+import difflib
+import concurrent.futures
+
 
 sys.path.append("../")
 from reformat.index import index as reformat_index
@@ -16,6 +19,8 @@ def index():
     reformat_index()
     stop_times_with_stop_name()
     data = load_data()
+    # duration = get_duration_timestamp_from_trip_id_with_departure_arrival(data, "OCESN037071R0100119847", "manteslajoie", "oissel")
+    # print("duration: " + str(duration))
     get_graph_routes(data)
     return "Build succeded"
 
@@ -27,18 +32,45 @@ def get_graph_routes(data=None):
         print("graph_routes.json not found, creating it...")
         data_routes = data["routes_parses"].astype(str)
         graph = []
+        nb_success = 0
+        nb_fail = 0
         for index, row in tqdm(data_routes.iterrows()):
             route_id = row["route_id"]
             route_long_name = row["route_long_name_parse"]
             if type(route_long_name) == str:
                 route_long_name_split = route_long_name.split(";")
-                if len(route_long_name_split) > 2:
+                if len(route_long_name_split) >= 2:
                     for nb_arrete in range(len(route_long_name_split) - 1):
-                        graph.append(
-                            {"route_id": route_id + ";" + str(nb_arrete), "departure": route_long_name_split[nb_arrete],
-                             "destination": route_long_name_split[nb_arrete + 1],
-                             "poids": random.random()})
 
+                        # Calcul du poids
+                        trips = get_trips_from_route_id(data, route_id)
+                        min_duration = None
+                        element_to_graph = None
+                        for index_trip, row_trip in trips.iterrows():
+                            trip_id = row_trip["trip_id"]
+                            service_id = row_trip["service_id"]
+                            duration_infos = get_duration_timestamp_from_trip_id_with_departure_arrival(data, trip_id, route_long_name_split[nb_arrete], route_long_name_split[nb_arrete + 1])
+                            if duration_infos != None:
+                                duration = abs(duration_infos["arrival_sec"] - duration_infos["departure_sec"])
+                                change_element_to_graph = False
+                                if min_duration == None:
+                                    change_element_to_graph = True
+                                elif duration < min_duration:
+                                    change_element_to_graph = True
+                                if change_element_to_graph:
+                                    min_duration = duration
+                                    element_to_graph = {"route_id": route_id + ";" + str(nb_arrete), "departure": route_long_name_split[nb_arrete], "destination": route_long_name_split[nb_arrete + 1], "service_id": service_id, "poids": duration}
+
+                        if element_to_graph != None:
+                            nb_success += 1
+                            graph.append(element_to_graph)
+                        else:
+                            nb_fail += 1
+                            print("No duration found for route_id: " + route_id + " and nb_arrete: " + str(nb_arrete) + " and departure: " + route_long_name_split[nb_arrete] + " and destination: " + route_long_name_split[nb_arrete + 1])
+
+            # if len(graph) >= 3:
+            #     break
+        print("nb_success: " + str(nb_success) + " and nb_fail: " + str(nb_fail))
         # write graph to json file
         with open("../Project_data/graph/graph_routes.json", "w") as outfile:
             json.dump(graph, outfile)
@@ -50,16 +82,12 @@ def get_graph_routes(data=None):
     return graph
 
 
+
+
 def get_trips_from_route_id(data, route_id):
     trips = data["trips"]
     trips = trips[trips["route_id"] == route_id]
     return trips
-
-
-def get_day_from_calendar(data, service_id):
-    calendar = data["calendar"]
-    calendar = calendar[calendar["service_id"] == service_id]
-    return calendar
 
 
 def is_available_a_day_from_service_id(data, service_id, timestamp_day):
@@ -77,13 +105,17 @@ def is_available_a_day_from_service_id(data, service_id, timestamp_day):
                     return True
         return False
 
+def get_day_from_calendar(data, service_id):
+    calendar = data["calendar"]
+    calendar = calendar[calendar["service_id"] == service_id]
+    return calendar
 
 def convert_date_from_calendar(date):
     return datetime.datetime.strptime(date, "%Y%m%d").date()
 
 
 def get_stop_times_from_trip_id(data, trip_id):
-    stop_times = data["stop_times"]
+    stop_times = data["stop_times_parses"]
     stop_times = stop_times[stop_times["trip_id"] == trip_id]
     return stop_times
 
@@ -93,19 +125,31 @@ def get_duration_timestamp_from_trip_id_with_departure_arrival(data, trip_id, de
     departure_sec = None
     arrival_sec = None
     for i in range(len(stop_times)):
-        if stop_times[i]["stop_name"] == departure:
-            departure_sec = time_to_seconds(stop_times[i]["departure_time"])
-        if stop_times[i]["stop_name"] == arrival:
-            arrival_sec = time_to_seconds(stop_times[i]["arrival_time"])
+        stop_time = stop_times.iloc[i]
+        if type(stop_time["stop_name"]) != str or type(departure) != str or type(arrival) != str:
+            continue
+        if difflib.SequenceMatcher(None, stop_time["stop_name"], departure).ratio() >= 0.5:
+            departure_sec = time_to_seconds(stop_time["departure_time"])
+        if difflib.SequenceMatcher(None, stop_time["stop_name"],arrival).ratio() >= 0.5:
+            arrival_sec = time_to_seconds(stop_time["arrival_time"])
     if departure_sec is None or arrival_sec is None:
         return None
     else:
-        return json.dumps({"departure_sec": departure_sec, "arrival_sec": arrival_sec})
+        return {"departure_sec": departure_sec, "arrival_sec": arrival_sec}
 
 
 def time_to_seconds(time):
     h, m, s = time.split(':')
     return int(h) * 3600 + int(m) * 60 + int(s)
+
+
+
+
+
+
+
+
+
 
 
 def removeGare(txt: str):
