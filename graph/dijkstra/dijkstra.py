@@ -1,11 +1,11 @@
 import sys
+import datetime
 
 sys.path.append('..')
 
 from build.index import get_graph_routes
 
 def dijkstra(departure, destination, timestamp):
-    # data = load_data()
 
     # On va créer un graph afin d'implémenter digistra à partir du fichier routes.csv
     # graph = create_graph_routes(data)
@@ -41,8 +41,37 @@ def dijkstra(departure, destination, timestamp):
     if result is None:
         return "Pas de trajets trouvés"
 
-    return result
+    return get_infos_from_parcours(graph_routes, result)
 
+def get_infos_from_parcours(graph_routes, parcours):
+    results = []
+    for route_id in parcours["parcours"]:
+        for route in graph_routes:
+            if route["route_id"] == route_id:
+                # Convertir des secondes en durée humaine
+                # https://stackoverflow.com/questions/775049/how-do-i-convert-seconds-to-hours-minutes-and-seconds
+                # Changer le format de la date pour qu'elle soit plus lisible
+
+
+                poids = datetime.timedelta(seconds=route["poids"])
+                departure_time = datetime.timedelta(seconds=route["departure_time"])
+                arrival_time = datetime.timedelta(seconds=route["arrival_time"]) + poids
+
+                result = {
+                    "route_id": route["route_id"],
+                    "departure": route["departure"],
+                    "destination": route["destination"],
+                    "poids": str(poids),
+                    "service_id": route["service_id"],
+                    "departure_time": str(departure_time),
+                    "arrival_time": str(arrival_time),
+                    "trip_id": route["trip_id"],
+                    "departure_stop_id": route["departure_stop_id"],
+                    "arrival_stop_id": route["arrival_stop_id"],
+                }
+                results.append(result)
+                break
+    return results
 
 # {
 #     "voisins":

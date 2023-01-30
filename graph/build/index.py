@@ -59,7 +59,7 @@ def get_graph_routes(data=None):
                                     change_element_to_graph = True
                                 if change_element_to_graph:
                                     min_duration = duration
-                                    element_to_graph = {"route_id": route_id + ";" + str(nb_arrete), "departure": route_long_name_split[nb_arrete], "destination": route_long_name_split[nb_arrete + 1], "service_id": service_id, "poids": duration}
+                                    element_to_graph = {"route_id": route_id + ";" + str(nb_arrete), "departure": route_long_name_split[nb_arrete], "destination": route_long_name_split[nb_arrete + 1], "service_id": service_id, "poids": duration, "departure_time": duration_infos["departure_sec"], "arrival_time": duration_infos["departure_sec"], "trip_id": trip_id, "departure_stop_id": duration_infos["departure_stop_id"], "arrival_stop_id": duration_infos["arrival_stop_id"]}
 
                         if element_to_graph != None:
                             nb_success += 1
@@ -124,18 +124,22 @@ def get_duration_timestamp_from_trip_id_with_departure_arrival(data, trip_id, de
     stop_times = get_stop_times_from_trip_id(data, trip_id)
     departure_sec = None
     arrival_sec = None
+    departure_stop_id = None
+    arrival_stop_id = None
     for i in range(len(stop_times)):
         stop_time = stop_times.iloc[i]
         if type(stop_time["stop_name"]) != str or type(departure) != str or type(arrival) != str:
             continue
         if difflib.SequenceMatcher(None, stop_time["stop_name"], departure).ratio() >= 0.5:
             departure_sec = time_to_seconds(stop_time["departure_time"])
+            departure_stop_id = stop_time["stop_id"]
         if difflib.SequenceMatcher(None, stop_time["stop_name"],arrival).ratio() >= 0.5:
             arrival_sec = time_to_seconds(stop_time["arrival_time"])
+            arrival_stop_id = stop_time["stop_id"]
     if departure_sec is None or arrival_sec is None:
         return None
     else:
-        return {"departure_sec": departure_sec, "arrival_sec": arrival_sec}
+        return {"departure_sec": departure_sec, "arrival_sec": arrival_sec, "departure_stop_id": departure_stop_id, "arrival_stop_id": arrival_stop_id}
 
 
 def time_to_seconds(time):
@@ -203,7 +207,6 @@ def delete_data():
     delete_one_data("../Project_data/data_sncf/pickle/trips.pkl")
     delete_one_data("../Project_data/data_sncf/routes_parses.csv")
     delete_one_data("../Project_data/data_sncf/stop_times_parses.csv")
-
 
 def load_a_data(name):
     if os.path.exists(f"../Project_data/data_sncf/pickle/{name}.pkl"):
