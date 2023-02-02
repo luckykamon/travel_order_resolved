@@ -9,3 +9,4 @@ Project_data/graph/graph_routes.json
 /front/.env
 Project_data/audio/*
 /Project_data/data_sncf/stop_times_parses.csv
+/Project_data/data_sncf/changes_stop_times_parses.json

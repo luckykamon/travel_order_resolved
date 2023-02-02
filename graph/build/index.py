@@ -11,16 +11,17 @@ sys.path.append("../")
 from reformat.index import index as reformat_index
 from reformat.index import reformat_string
 
-
-
+new_tab= []
 
 
 def index():
-    delete_data()
+    # delete_data()
     reformat_index()
     stop_times_with_stop_name()
     data = load_data()
     get_graph_routes(data)
+    save_changes_stop_times_parses()
+    apply_changes_stop_times_parses()
 
     # test_parse_name_cities(data)
 
@@ -150,32 +151,92 @@ def get_stop_times_from_trip_id(data, trip_id):
 
 def get_duration_timestamp_from_trip_id_with_departure_arrival(data, trip_id, departure, arrival):
     stop_times = get_stop_times_from_trip_id(data, trip_id)
-    departure_sec = None
-    arrival_sec = None
-    departure_stop_id = None
-    arrival_stop_id = None
+    # departure_sec = None
+    # arrival_sec = None
+    # departure_stop_id = None
+    # arrival_stop_id = None
+    ratio_departure = []
+    ratio_arrival = []
     for i in range(len(stop_times)):
         stop_time = stop_times.iloc[i]
         if type(stop_time["stop_name"]) != str or type(departure) != str or type(arrival) != str:
             continue
-        if difflib.SequenceMatcher(None, stop_time["stop_name"], departure).ratio() >= 0.5:
-            departure_sec = time_to_seconds(stop_time["departure_time"])
-            departure_stop_id = stop_time["stop_id"]
-        if difflib.SequenceMatcher(None, stop_time["stop_name"],arrival).ratio() >= 0.5:
-            arrival_sec = time_to_seconds(stop_time["arrival_time"])
-            arrival_stop_id = stop_time["stop_id"]
-    if departure_sec is None or arrival_sec is None:
+        ratio_departure.append(difflib.SequenceMatcher(None, stop_time["stop_name"], departure).ratio())
+        ratio_arrival.append(difflib.SequenceMatcher(None, stop_time["stop_name"], arrival).ratio())
+        # if difflib.SequenceMatcher(None, stop_time["stop_name"], departure).ratio() >= 0.5:
+        #     departure_sec = time_to_seconds(stop_time["departure_time"])
+        #     departure_stop_id = stop_time["stop_id"]
+        # if difflib.SequenceMatcher(None, stop_time["stop_name"],arrival).ratio() >= 0.5:
+        #     arrival_sec = time_to_seconds(stop_time["arrival_time"])
+        #     arrival_stop_id = stop_time["stop_id"]
+    # get index of the max ratio
+    index_departure = ratio_departure.index(max(ratio_departure))
+    index_arrival = ratio_arrival.index(max(ratio_arrival))
+    # check if the index is the same
+    if index_departure == index_arrival:
         return None
     else:
+        stop_times_departure = stop_times.iloc[index_departure]
+        stop_times_arrival = stop_times.iloc[index_arrival]
+        # On met à jour le fichier stop_times_parses avec le nom de l'arrêt
+        change_stop_name_from_stop_id_and_ratio(stop_times_departure["stop_id"], departure, ratio_departure[index_departure])
+        change_stop_name_from_stop_id_and_ratio(stop_times_arrival["stop_id"], arrival, ratio_arrival[index_arrival])
+        # On récupère les bonnes données
+        departure_sec = time_to_seconds(stop_times_departure["departure_time"])
+        arrival_sec = time_to_seconds(stop_times_arrival["arrival_time"])
+        departure_stop_id = stop_times_departure["stop_id"]
+        arrival_stop_id = stop_times_arrival["stop_id"]
         return {"departure_sec": departure_sec, "arrival_sec": arrival_sec, "departure_stop_id": departure_stop_id, "arrival_stop_id": arrival_stop_id}
+    # if departure_sec is None or arrival_sec is None:
+    #     return None
+    # else:
+    #     return {"departure_sec": departure_sec, "arrival_sec": arrival_sec, "departure_stop_id": departure_stop_id, "arrival_stop_id": arrival_stop_id}
 
 
 def time_to_seconds(time):
     h, m, s = time.split(':')
     return int(h) * 3600 + int(m) * 60 + int(s)
 
+def change_stop_name_from_stop_id_and_ratio(stop_id, new_stop_name, ratio):
+    # file_path = "../Project_data/data_sncf/changes_stop_times_parses.json"
+    json_to_add = {"stop_id": stop_id, "stop_name": new_stop_name, "ratio": ratio}
+    # if os.path.exists(file_path):
+    #     with open(file_path, "r") as f:
+    #         tab = json.load(f)
+    is_json_to_add_in_tab = False
+    for i in range(len(new_tab)):
+        if new_tab[i]["stop_id"] == stop_id:
+            if new_tab[i]["ratio"] < ratio:
+                new_tab[i] = json_to_add
+                break
+            is_json_to_add_in_tab = True
+    if not is_json_to_add_in_tab:
+        new_tab.append(json_to_add)
+    #     with open(file_path, "w") as f:
+    #         json.dump(new_tab, f)
+    # else:
+    #     with open(file_path, "w") as f:
+    #         json.dump([json_to_add], f)
 
 
+def save_changes_stop_times_parses():
+    file_path = "../Project_data/data_sncf/changes_stop_times_parses.json"
+    if not os.path.exists(file_path):
+        with open(file_path, "w") as f:
+            json.dump(new_tab, f)
+
+def apply_changes_stop_times_parses():
+    file_path = "../Project_data/data_sncf/changes_stop_times_parses.json"
+    if os.path.exists(file_path):
+        with open(file_path, "r") as f:
+            tab = json.load(f)
+        data = load_data()
+        data_stop_times_parses = data["stop_times_parses"]
+        for i in range(len(tab)):
+            # in data_stop_times_parses change the stop_name by tab[i]["stop_name"] with use pandas
+            data_stop_times_parses.loc[data_stop_times_parses["stop_id"] == tab[i]["stop_id"], "stop_name"] = tab[i]["stop_name"]
+        # save the data_stop_times_parses
+        data_stop_times_parses.to_csv("../Project_data/data_sncf/stop_times_parses.csv", index=False)
 
 
 
