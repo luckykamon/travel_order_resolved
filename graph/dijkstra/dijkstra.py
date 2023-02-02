@@ -5,6 +5,8 @@ sys.path.append('..')
 
 from build.index import get_graph_routes
 from build.index import parse_name_cities
+from build.index import is_available_a_day_from_service_id
+from build.index import load_data
 
 import pandas as panda
 
@@ -17,29 +19,24 @@ def dijkstra(departure, destination, timestamp):
 
     graph_routes = get_graph_routes()
 
-    result = dijkstra_from_graph(graph_routes, departure, destination)
-
-    # On va récupérer les données des stops là où la gare à le même nom que la gare de départ
-    # df_filtered = get_stops_from_gare_departure(data, departure)
+    # if timestamp is not None:
+    #     list_service_id_not_available = []
+    #     # On va récupérer les services_id qui sont disponibles à la date passée en paramètre
+    #     for i in range(len(graph_routes)):
+    #         service_id = graph_routes[i]["service_id"]
+    #         services_id_is_available = is_available_a_day_from_service_id(load_data(), service_id, timestamp)
+    #         if not services_id_is_available:
+    #             list_service_id_not_available.append(service_id)
     #
-    # if df_filtered is None:
-    #     return None
+    #     # On va supprimer les routes qui ne sont pas disponibles à la date passée en paramètre
+    #     for service_id in list_service_id_not_available:
+    #         for i in range(len(graph_routes)):
+    #             if graph_routes[i]["service_id"] == service_id:
+    #                 graph_routes.pop(i)
+    #                 break
 
-    # On va récupérer la liste des stop_times qui contiennent au moins un stop_id de la liste passée en paramètre
-    # value_stop_times = get_list_stop_times_from_list_stop_id(data, df_filtered["stop_id"])
 
-    # print(type(value_stop_times))
-
-    # On va récupérer les éléments associés à chacun des stop_times qui sont situés dans les fichiers trips, routes, calendar & calendar_dates
-    # trips_from_value_stip_times = get_trips_from_value_stip_times(data, value_stop_times)
-    # La fonction ci-dessus est beaucoup trop lente, il faudrait faire ce travail en amont et stocker les résultats dans un fichier pickle
-    # create_csv_of_stop_times_with_infos_match_with_stop_id(data)
-
-    # json_list = []
-    # for df in value_stop_times:
-    #     json_list.append(df.to_json())
-
-    # print(json_list)
+    result = dijkstra_from_graph(graph_routes, departure, destination, timestamp)
 
     if result is None:
         return "Pas de trajets trouvés"
@@ -94,10 +91,10 @@ def get_infos_from_parcours(graph_routes, parcours):
 #  }
 # {"poids": voisin["poids"], "destination": voisin["destination"], "parcours": [voisin["route_id"]]}
 
-def dijkstra_from_graph(graph_data, departure, destination):
+def dijkstra_from_graph(graph_data, departure, destination, timestamp):
     sommet_actuel = departure
     graph_dijkstra = {"voisins": get_voisins(graph_data, sommet_actuel, None)}
-    chemin_dijkstra = get_chemin_dijkstra_initial(graph_dijkstra)
+    chemin_dijkstra = get_chemin_dijkstra_initial(graph_dijkstra, timestamp, graph_data)
 
     i = 0
 
@@ -108,7 +105,7 @@ def dijkstra_from_graph(graph_data, departure, destination):
             print("Chemin trouvé")
             break
 
-        graph_dijkstra, chemin_dijkstra = update_graph_and_chemin_dijkstra(graph_data, graph_dijkstra, chemin_dijkstra)
+        graph_dijkstra, chemin_dijkstra = update_graph_and_chemin_dijkstra(graph_data, graph_dijkstra, chemin_dijkstra, timestamp)
 
         i += 1
         if i == 100:
@@ -120,10 +117,11 @@ def dijkstra_from_graph(graph_data, departure, destination):
         return chemin_dijkstra[0]
 
 
-def update_graph_and_chemin_dijkstra(graph_data, graph_dijkstra, chemin_dijkstra):
+def update_graph_and_chemin_dijkstra(graph_data, graph_dijkstra, chemin_dijkstra, timestamp):
     if len(chemin_dijkstra) == 0:
         return graph_dijkstra, chemin_dijkstra
     # On va récupérer le chemin le plus court actuel qui est le premier car la liste est triée
+
     chemin_court_actuel = chemin_dijkstra[0]
     # On va récupérer la destination de ce chemin
     destination_chemin_court_actuel = chemin_court_actuel["destination"]
@@ -136,7 +134,7 @@ def update_graph_and_chemin_dijkstra(graph_data, graph_dijkstra, chemin_dijkstra
     # Ajouter les nouveaux chemins au chemin_dijkstra
     if new_chemins is not None:
         for new_chemin in new_chemins:
-            chemin_dijkstra = ajout_chemin_dijkstra(chemin_dijkstra, new_chemin)
+            chemin_dijkstra = ajout_chemin_dijkstra(chemin_dijkstra, new_chemin, timestamp, graph_data)
 
     return graph_dijkstra, chemin_dijkstra
 
@@ -181,20 +179,40 @@ def add_voisins_from_chemin(graph_dijkstra, chemin, voisins, new_chemin=None):
             break
 
 
-def get_chemin_dijkstra_initial(graph_dijkstra):
+def get_chemin_dijkstra_initial(graph_dijkstra, timestamp, graph_data):
     chemin_dijkstra = []
     for voisin in graph_dijkstra["voisins"]:
-        chemin_dijkstra = ajout_chemin_dijkstra(chemin_dijkstra,
-                                                {"poids": voisin["poids"], "destination": voisin["destination"],
-                                                 "parcours": [voisin["route_id"]]})
+        add_chemin_dijkstra = False
+        if timestamp is not None:
+            if is_available_a_day_from_service_id(load_data(), voisin["service_id"], timestamp):
+                add_chemin_dijkstra = True
+        else:
+             add_chemin_dijkstra = True
+        if add_chemin_dijkstra:
+            chemin_dijkstra = ajout_chemin_dijkstra(chemin_dijkstra, {"poids": voisin["poids"], "destination": voisin["destination"], "parcours": [voisin["route_id"]]}, timestamp, graph_data)
     return chemin_dijkstra
 
 
-def ajout_chemin_dijkstra(chemin_dijkstra, element):
-    # ajouter dans cette liste triée par poids
-    chemin_dijkstra.append(element)
-    return trie_chemin_dijkstra(chemin_dijkstra)
+def ajout_chemin_dijkstra(chemin_dijkstra, element, timestamp, graph_data):
+    if is_available_a_day_from_parcours(graph_data, element["parcours"], timestamp):
+        # ajouter dans cette liste triée par poids
+        chemin_dijkstra.append(element)
+        return trie_chemin_dijkstra(chemin_dijkstra)
+    else:
+        return chemin_dijkstra
 
+def is_available_a_day_from_parcours(graph_data, parcours, timestamp):
+    len_parcours = len(parcours)
+    if len_parcours == 0:
+        return True
+    else:
+        route_id = parcours[len_parcours - 1]
+        # get the value in the graph_data where route_id == parcours[0]
+        infos_parcours = list(filter(lambda x: x['route_id'] == route_id, graph_data))
+        if len(infos_parcours) > 0:
+            service_id = infos_parcours[0]["service_id"]
+            return is_available_a_day_from_service_id(load_data(), service_id, timestamp)
+    return True
 
 def trie_chemin_dijkstra(chemin_dijkstra):
     chemin_dijkstra.sort(key=lambda x: x["poids"])

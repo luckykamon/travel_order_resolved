@@ -123,12 +123,12 @@ def is_available_a_day_from_service_id(data, service_id, timestamp_day):
     # day in timestamp
     calendar = get_day_from_calendar(data, service_id)
     if calendar.empty:
-        return False
+        return True
     else:
         datetime_day = datetime.datetime.fromtimestamp(timestamp_day).date()
         for i in range(len(calendar)):
-            start_date = convert_date_from_calendar(calendar.iloc[i]["start_date"])
-            end_date = convert_date_from_calendar(calendar.iloc[i]["end_date"])
+            start_date = convert_date_from_calendar(str(calendar.iloc[i]["start_date"]))
+            end_date = convert_date_from_calendar(str(calendar.iloc[i]["end_date"]))
             if start_date <= datetime_day <= end_date:
                 if calendar.iloc[i][datetime_day.strftime("%A").lower()] == 1:
                     return True
