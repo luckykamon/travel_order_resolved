@@ -4,6 +4,9 @@ import datetime
 sys.path.append('..')
 
 from build.index import get_graph_routes
+from build.index import parse_name_cities
+
+import pandas as panda
 
 def dijkstra(departure, destination, timestamp):
 
@@ -59,8 +62,8 @@ def get_infos_from_parcours(graph_routes, parcours):
 
                 result = {
                     "route_id": route["route_id"],
-                    "departure": route["departure"],
-                    "destination": route["destination"],
+                    "departure": parse_name_cities(route["departure"]),
+                    "destination": parse_name_cities(route["destination"]),
                     "poids": str(poids),
                     "service_id": route["service_id"],
                     "departure_time": str(departure_time),
@@ -72,6 +75,10 @@ def get_infos_from_parcours(graph_routes, parcours):
                 results.append(result)
                 break
     return results
+
+
+
+
 
 # {
 #     "voisins":

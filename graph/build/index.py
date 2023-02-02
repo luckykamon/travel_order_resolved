@@ -1,12 +1,10 @@
 import json
-import random
 import sys
 import datetime
 from tqdm import tqdm
 import pandas as panda
 import os
 import difflib
-import concurrent.futures
 
 
 sys.path.append("../")
@@ -14,16 +12,46 @@ from reformat.index import index as reformat_index
 from reformat.index import reformat_string
 
 
+
+
+
 def index():
     delete_data()
     reformat_index()
     stop_times_with_stop_name()
     data = load_data()
-    # duration = get_duration_timestamp_from_trip_id_with_departure_arrival(data, "OCESN037071R0100119847", "manteslajoie", "oissel")
-    # print("duration: " + str(duration))
     get_graph_routes(data)
+
+    # test_parse_name_cities(data)
+
     return "Build succeded"
 
+
+def test_parse_name_cities(data):
+    data_stop_times_parses = data["stop_times_parses"]
+    # Execute the function parse_name_cities on all the cities in the column "stop_name"
+    data_stop_times_parses["stop_name_parsed"] = data_stop_times_parses["stop_name"].apply(lambda x: parse_name_cities(x))
+    # Print the result of all stop_name_parsed
+    print(data_stop_times_parses["stop_name_parsed"])
+
+def parse_name_cities(city):
+    data_cities = load_data()["cities"]
+
+    city_index = data_cities[data_cities["city"] == city].index.tolist()
+
+    if len(city_index) == 0:
+        city_index = data_cities[data_cities["city_bis"] == city].index.tolist()
+    if len(city_index) == 0:
+        city_index = data_cities[data_cities["city_nospace"] == city].index.tolist()
+    if len(city_index) == 0:
+        city_index = data_cities[data_cities["city_nospace_bis"] == city].index.tolist()
+
+
+    if len(city_index) == 0:
+        print("city not found: " + city)
+        return city
+
+    return data_cities.iloc[city_index[0]]["city_formatted"]
 
 def get_graph_routes(data=None):
     if data is None:
@@ -221,6 +249,7 @@ def load_data():
         "agency": load_a_data("agency"),
         "calendar": load_a_data("calendar"),
         "calendar_dates": load_a_data("calendar_dates"),
+        "cities": load_a_data("cities"),
         "routes": load_a_data("routes"),
         "routes_parses": load_a_data("routes_parses"),
         "stop_times": load_a_data("stop_times"),
@@ -245,6 +274,7 @@ def compress_data_to_pickle():
     compress_one_data_to_pickle("agency")
     compress_one_data_to_pickle("calendar")
     compress_one_data_to_pickle("calendar_dates")
+    compress_one_data_to_pickle("cities")
     compress_one_data_to_pickle("routes")
     compress_one_data_to_pickle("routes_parses")
     compress_one_data_to_pickle("stop_times")
