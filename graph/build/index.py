@@ -88,7 +88,7 @@ def get_graph_routes(data=None):
                                     change_element_to_graph = True
                                 if change_element_to_graph:
                                     min_duration = duration
-                                    element_to_graph = {"route_id": route_id + ";" + str(nb_arrete), "departure": route_long_name_split[nb_arrete], "destination": route_long_name_split[nb_arrete + 1], "service_id": service_id, "poids": duration, "departure_time": duration_infos["departure_sec"], "arrival_time": duration_infos["departure_sec"], "trip_id": trip_id, "departure_stop_id": duration_infos["departure_stop_id"], "arrival_stop_id": duration_infos["arrival_stop_id"]}
+                                    element_to_graph = {"route_id": route_id + ";" + str(nb_arrete), "departure": route_long_name_split[nb_arrete], "destination": route_long_name_split[nb_arrete + 1], "service_id": service_id, "poids": duration, "departure_time": duration_infos["departure_sec"], "arrival_time": duration_infos["arrival_sec"], "trip_id": trip_id, "departure_stop_id": duration_infos["departure_stop_id"], "arrival_stop_id": duration_infos["arrival_stop_id"]}
 
                         if element_to_graph != None:
                             nb_success += 1
@@ -149,6 +149,8 @@ def get_stop_times_from_trip_id(data, trip_id):
     return stop_times
 
 
+
+
 def get_duration_timestamp_from_trip_id_with_departure_arrival(data, trip_id, departure, arrival):
     stop_times = get_stop_times_from_trip_id(data, trip_id)
     # departure_sec = None
@@ -191,7 +193,6 @@ def get_duration_timestamp_from_trip_id_with_departure_arrival(data, trip_id, de
     #     return None
     # else:
     #     return {"departure_sec": departure_sec, "arrival_sec": arrival_sec, "departure_stop_id": departure_stop_id, "arrival_stop_id": arrival_stop_id}
-
 
 def time_to_seconds(time):
     h, m, s = time.split(':')
@@ -343,3 +344,5 @@ def compress_data_to_pickle():
     compress_one_data_to_pickle("stops")
     compress_one_data_to_pickle("transfers")
     compress_one_data_to_pickle("trips")
+
+get_duration_timestamp_from_trip_id_with_departure_arrival(load_data(), "OCESN852631F0400442796", "Granville", "Rennes")

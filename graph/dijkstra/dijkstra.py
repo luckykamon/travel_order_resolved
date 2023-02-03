@@ -55,7 +55,7 @@ def get_infos_from_parcours(graph_routes, parcours):
 
                 poids = datetime.timedelta(seconds=route["poids"])
                 departure_time = datetime.timedelta(seconds=route["departure_time"])
-                arrival_time = datetime.timedelta(seconds=route["arrival_time"]) + poids
+                arrival_time = datetime.timedelta(seconds=route["arrival_time"])
 
                 result = {
                     "route_id": route["route_id"],
@@ -202,6 +202,8 @@ def ajout_chemin_dijkstra(chemin_dijkstra, element, timestamp, graph_data):
         return chemin_dijkstra
 
 def is_available_a_day_from_parcours(graph_data, parcours, timestamp):
+    if timestamp is None:
+        return True
     len_parcours = len(parcours)
     if len_parcours == 0:
         return True
