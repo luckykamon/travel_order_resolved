@@ -10,8 +10,8 @@ from build.index import load_data
 
 import pandas as panda
 
-def dijkstra(departure, destination, timestamp):
 
+def dijkstra(departure, destination, timestamp):
     # On va créer un graph afin d'implémenter digistra à partir du fichier routes.csv
     # graph = create_graph_routes(data)
 
@@ -35,13 +35,13 @@ def dijkstra(departure, destination, timestamp):
     #                 graph_routes.pop(i)
     #                 break
 
-
     result = dijkstra_from_graph(graph_routes, departure, destination, timestamp)
 
     if result is None:
         return "Pas de trajets trouvés"
 
-    return get_infos_from_parcours(graph_routes, result)
+    return humans_results(get_infos_from_parcours(graph_routes, result))
+
 
 def get_infos_from_parcours(graph_routes, parcours):
     results = []
@@ -52,10 +52,13 @@ def get_infos_from_parcours(graph_routes, parcours):
                 # https://stackoverflow.com/questions/775049/how-do-i-convert-seconds-to-hours-minutes-and-seconds
                 # Changer le format de la date pour qu'elle soit plus lisible
 
-
                 poids = datetime.timedelta(seconds=route["poids"])
-                departure_time = datetime.timedelta(seconds=route["departure_time"])
-                arrival_time = datetime.timedelta(seconds=route["arrival_time"])
+                if (route["departure_time"] > route["arrival_time"]):
+                    departure_time = datetime.timedelta(seconds=route["arrival_time"])
+                    arrival_time = datetime.timedelta(seconds=route["departure_time"])
+                else:
+                    departure_time = datetime.timedelta(seconds=route["departure_time"])
+                    arrival_time = datetime.timedelta(seconds=route["arrival_time"])
 
                 result = {
                     "route_id": route["route_id"],
@@ -73,8 +76,56 @@ def get_infos_from_parcours(graph_routes, parcours):
                 break
     return results
 
+def inverse_timedelta_str(x):
+    hours, minutes, seconds = map(int, x.split(":"))
+    return hours * 3600 + minutes * 60 + seconds
 
 
+def humans_results(results):
+    total_duration = 0
+    etapes = []
+    duree_entre_deux_arrets = []
+    index_result = 0
+    for result in results:
+        if index_result > 0:
+            second_arrival_trajet_precedent = inverse_timedelta_str(results[index_result-1]["arrival_time"])
+            second_depart_trajet_actuel = inverse_timedelta_str(result["departure_time"])
+            if second_arrival_trajet_precedent > second_depart_trajet_actuel:
+                duree_entre_deux_arrets.append(86400 - second_arrival_trajet_precedent + second_depart_trajet_actuel)
+            else:
+                duree_entre_deux_arrets.append(second_depart_trajet_actuel - second_arrival_trajet_precedent)
+            total_duration += duree_entre_deux_arrets[index_result-1]
+        total_duration += int(inverse_timedelta_str(result["poids"]))
+        etapes.append(
+            "Dans la ville " + result["departure"] + " aller à l'arrêt nommé " + result["departure_stop_id"] + " à " +
+            result["departure_time"] + " patientez pendant " + result["poids"] + " et arriver à l'arrêt nommé " +
+            result["arrival_stop_id"] + " à " + result["arrival_time"] + " dans la ville " + result[
+                "destination"] + " où vous serez déposé à l'arrêt " + result["arrival_stop_id"] + ". \n")
+        index_result += 1
+    total_duration = datetime.timedelta(seconds=total_duration)
+    humans_results = "Le trajets le plus court a une durée de " + str(total_duration) + ". \nIl est composé de " + str(
+        len(results)) + " étapes. \n"
+    for index_etape in range(len(etapes)):
+        humans_results += etapes[index_etape]
+        if index_etape < len(etapes) - 1:
+            humans_results += "Pendant " + str(datetime.timedelta(seconds=duree_entre_deux_arrets[index_etape])) + " attendez le prochain train. \n"
+    humans_results += "Vous êtes arrivé à destination !"
+    print(duree_entre_deux_arrets)
+    return humans_results
+
+    # humans_results.append("")
+    # print("route_id: ", result["route_id"])
+    # print("departure: ", result["departure"])
+    # print("destination: ", result["destination"])
+    # print("poids: ", result["poids"])
+    # print("service_id: ", result["service_id"])
+    # print("departure_time: ", result["departure_time"])
+    # print("arrival_time: ", result["arrival_time"])
+    # print("trip_id: ", result["trip_id"])
+    # print("departure_stop_id: ", result["departure_stop_id"])
+    # print("arrival_stop_id: ", result["arrival_stop_id"])
+    # print("")
+    return humans_results
 
 
 # {
@@ -105,7 +156,8 @@ def dijkstra_from_graph(graph_data, departure, destination, timestamp):
             print("Chemin trouvé")
             break
 
-        graph_dijkstra, chemin_dijkstra = update_graph_and_chemin_dijkstra(graph_data, graph_dijkstra, chemin_dijkstra, timestamp)
+        graph_dijkstra, chemin_dijkstra = update_graph_and_chemin_dijkstra(graph_data, graph_dijkstra, chemin_dijkstra,
+                                                                           timestamp)
 
         i += 1
         if i == 100:
@@ -126,7 +178,8 @@ def update_graph_and_chemin_dijkstra(graph_data, graph_dijkstra, chemin_dijkstra
     # On va récupérer la destination de ce chemin
     destination_chemin_court_actuel = chemin_court_actuel["destination"]
     # On va récupérer les voisins de la destination du chemin le plus court actuel
-    voisins_destination_chemin_court_actuel = get_voisins(graph_data, destination_chemin_court_actuel, chemin_court_actuel["parcours"])
+    voisins_destination_chemin_court_actuel = get_voisins(graph_data, destination_chemin_court_actuel,
+                                                          chemin_court_actuel["parcours"])
     # On va ajouter les voisins de la destination du chemin le plus court actuel au graph_dijkstra
     new_chemins = add_voisins_from_chemin(graph_dijkstra, chemin_court_actuel, voisins_destination_chemin_court_actuel)
     # Supprimer le premier element de la liste chemin_dijkstra
@@ -187,9 +240,11 @@ def get_chemin_dijkstra_initial(graph_dijkstra, timestamp, graph_data):
             if is_available_a_day_from_service_id(load_data(), voisin["service_id"], timestamp):
                 add_chemin_dijkstra = True
         else:
-             add_chemin_dijkstra = True
+            add_chemin_dijkstra = True
         if add_chemin_dijkstra:
-            chemin_dijkstra = ajout_chemin_dijkstra(chemin_dijkstra, {"poids": voisin["poids"], "destination": voisin["destination"], "parcours": [voisin["route_id"]]}, timestamp, graph_data)
+            chemin_dijkstra = ajout_chemin_dijkstra(chemin_dijkstra,
+                                                    {"poids": voisin["poids"], "destination": voisin["destination"],
+                                                     "parcours": [voisin["route_id"]]}, timestamp, graph_data)
     return chemin_dijkstra
 
 
@@ -200,6 +255,7 @@ def ajout_chemin_dijkstra(chemin_dijkstra, element, timestamp, graph_data):
         return trie_chemin_dijkstra(chemin_dijkstra)
     else:
         return chemin_dijkstra
+
 
 def is_available_a_day_from_parcours(graph_data, parcours, timestamp):
     if timestamp is None:
@@ -216,6 +272,7 @@ def is_available_a_day_from_parcours(graph_data, parcours, timestamp):
             return is_available_a_day_from_service_id(load_data(), service_id, timestamp)
     return True
 
+
 def trie_chemin_dijkstra(chemin_dijkstra):
     chemin_dijkstra.sort(key=lambda x: x["poids"])
     return chemin_dijkstra
@@ -223,7 +280,4 @@ def trie_chemin_dijkstra(chemin_dijkstra):
 
 def get_voisins(graph, sommet_actuel, exclude_route_id=None):
     return [voisin for voisin in graph if voisin["departure"] == sommet_actuel and (
-                exclude_route_id is None or voisin["route_id"] not in exclude_route_id)]
-
-
-
+            exclude_route_id is None or voisin["route_id"] not in exclude_route_id)]
