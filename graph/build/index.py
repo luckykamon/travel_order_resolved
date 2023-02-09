@@ -345,4 +345,4 @@ def compress_data_to_pickle():
     compress_one_data_to_pickle("transfers")
     compress_one_data_to_pickle("trips")
 
-get_duration_timestamp_from_trip_id_with_departure_arrival(load_data(), "OCESN852631F0400442796", "Granville", "Rennes")
+# get_duration_timestamp_from_trip_id_with_departure_arrival(load_data(), "OCESN852631F0400442796", "Granville", "Rennes")
