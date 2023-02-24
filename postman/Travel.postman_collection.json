@@ -1,0 +1,236 @@
+{
+	"info": {
+		"_postman_id": "efe67ecb-861b-44e1-83e9-93089180bfdf",
+		"name": "Travel",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "23257404"
+	},
+	"item": [
+		{
+			"name": "speechtotext",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "filedata",
+							"type": "file",
+							"src": "/Users/lucas/Desktop/Testfollow.mp3"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{HOST_BACK_speechtotext}}/speechtotext",
+					"host": [
+						"{{HOST_BACK_speechtotext}}"
+					],
+					"path": [
+						"speechtotext"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "trip",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"data\": \"je vais aller a Le Havre en partant de Vernon\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{HOST_BACK_trip}}/trip",
+					"host": [
+						"{{HOST_BACK_trip}}"
+					],
+					"path": [
+						"trip"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Itinéraire /build",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{HOST_BACK_graph}}/build",
+					"host": [
+						"{{HOST_BACK_graph}}"
+					],
+					"path": [
+						"build"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Itinéraire /reformat",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{HOST_BACK_graph}}/reformat",
+					"host": [
+						"{{HOST_BACK_graph}}"
+					],
+					"path": [
+						"reformat"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Itinéraire /graph",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"Departure\": \"vernon\",\n    \"Destination\": \"lehavre\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{HOST_BACK_graph}}/graph",
+					"host": [
+						"{{HOST_BACK_graph}}"
+					],
+					"path": [
+						"graph"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Paris -> Rennes",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"Departure\": \"paris\",\n    \"Destination\": \"rennes\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{HOST_BACK_graph}}/graph",
+							"host": [
+								"{{HOST_BACK_graph}}"
+							],
+							"path": [
+								"graph"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Server",
+							"value": "Werkzeug/2.2.2 Python/3.10.6"
+						},
+						{
+							"key": "Date",
+							"value": "Fri, 03 Feb 2023 13:39:49 GMT"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						},
+						{
+							"key": "Content-Length",
+							"value": "741"
+						},
+						{
+							"key": "Access-Control-Allow-Origin",
+							"value": "*"
+						},
+						{
+							"key": "Connection",
+							"value": "close"
+						}
+					],
+					"cookie": [],
+					"body": "[\n    {\n        \"arrival_stop_id\": \"StopPoint:OCETrain TER-87447680\",\n        \"arrival_time\": \"13:54:00\",\n        \"departure\": \"Paris\",\n        \"departure_stop_id\": \"StopPoint:OCETrain TER-87448001\",\n        \"departure_time\": \"13:04:00\",\n        \"destination\": \"Granville\",\n        \"poids\": \"0:50:00\",\n        \"route_id\": \"OCE1506036;0\",\n        \"service_id\": 1086,\n        \"trip_id\": \"OCESN003467F030038115\"\n    },\n    {\n        \"arrival_stop_id\": \"StopPoint:OCETrain TER-87444000\",\n        \"arrival_time\": \"16:07:00\",\n        \"departure\": \"Granville\",\n        \"departure_stop_id\": \"StopPoint:OCETrain TER-87444042\",\n        \"departure_time\": \"16:16:00\",\n        \"destination\": \"Rennes\",\n        \"poids\": \"0:09:00\",\n        \"route_id\": \"OCE584;3\",\n        \"service_id\": 5374,\n        \"trip_id\": \"OCESN852631F0400442796\"\n    }\n]"
+				},
+				{
+					"name": "Vernon -> Le Havre",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"Departure\": \"vernon\",\n    \"Destination\": \"lehavre\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{HOST_BACK_graph}}/graph",
+							"host": [
+								"{{HOST_BACK_graph}}"
+							],
+							"path": [
+								"graph"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Server",
+							"value": "Werkzeug/2.2.2 Python/3.10.6"
+						},
+						{
+							"key": "Date",
+							"value": "Fri, 03 Feb 2023 13:43:31 GMT"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						},
+						{
+							"key": "Content-Length",
+							"value": "738"
+						},
+						{
+							"key": "Access-Control-Allow-Origin",
+							"value": "*"
+						},
+						{
+							"key": "Connection",
+							"value": "close"
+						}
+					],
+					"cookie": [],
+					"body": "[\n    {\n        \"arrival_stop_id\": \"StopPoint:OCETrain TER-87411017\",\n        \"arrival_time\": \"10:53:00\",\n        \"departure\": \"Vernon\",\n        \"departure_stop_id\": \"StopPoint:OCETrain TER-87413385\",\n        \"departure_time\": \"10:31:00\",\n        \"destination\": \"Rouen\",\n        \"poids\": \"0:22:00\",\n        \"route_id\": \"OCE1506035;1\",\n        \"service_id\": 12609,\n        \"trip_id\": \"OCESN003110F100107211\"\n    },\n    {\n        \"arrival_stop_id\": \"StopPoint:OCETrain TER-87415661\",\n        \"arrival_time\": \"7:33:00\",\n        \"departure\": \"Rouen\",\n        \"departure_stop_id\": \"StopPoint:OCETrain TER-87411017\",\n        \"departure_time\": \"7:48:00\",\n        \"destination\": \"Le-Havre\",\n        \"poids\": \"0:15:00\",\n        \"route_id\": \"OCE1506035;2\",\n        \"service_id\": 605,\n        \"trip_id\": \"OCESN013103F1701715424\"\n    }\n]"
+				}
+			]
+		}
+	]
+}
